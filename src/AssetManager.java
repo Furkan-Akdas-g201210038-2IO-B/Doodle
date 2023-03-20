@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class AssetManager {
-
     GamePanel gp;
     ArrayList<Platform> platforms = new ArrayList<>();
     ArrayList<Spring> springs = new ArrayList<>();

@@ -4,8 +4,12 @@ public class Executor {
 
     private Observer observer;
     private AssetManager assetManager;
+
+    private KeyHandler keyHandler;
+
     Executor(GamePanel gp){
         this.gp=gp;
+        this.keyHandler=this.gp.keyHandler;
         this.observer=this.gp.observer;
         this.assetManager = this.gp.assetManager;
     }
@@ -13,7 +17,9 @@ public class Executor {
     public void execute(){
 
         if(gp.observer.earnedVelocity<0)
-            assetManager.doodle.updateVelocityY(gp.observer.earnedVelocity); ;
+            assetManager.doodle.setVelocityY(gp.observer.earnedVelocity);
+
+
 
     }
 

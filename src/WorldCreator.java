@@ -22,8 +22,8 @@ public class WorldCreator {
     public void placePlatforms() {
 
         for (Platform platform : gp.assetManager.platforms){
-            int randomX = random.nextInt(gp.screenWidth - platform.getScreenRect().width);
-            platform.getScreenRect().setLocation(new Point(randomX,cursorYPlatform));
+            int randomX = random.nextInt(gp.screenWidth - platform.getMainRect().width);
+            platform.getMainRect().setLocation(new Point(randomX,cursorYPlatform));
 
             cursorYPlatform+=marginYPlatform;
         }

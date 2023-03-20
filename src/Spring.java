@@ -3,17 +3,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Spring {
+public class Spring extends Asset {
 
-
-    private final Rectangle screenRect;
-
-    private final BufferedImage image;
-    private final BufferedImage image1;
+    private final BufferedImage comp;
+    private final BufferedImage unComp;
 
     private final Rectangle solidArea;
 
-    private final int solidness = -20;
+    private final int velocityToBeGiven = -8;
+    private final int aToBeGiven = 1;
 
     private boolean compressed = true;
 
@@ -21,22 +19,20 @@ public class Spring {
         return solidArea;
     }
 
-    public Rectangle getScreenRect(){return screenRect;}
-
-    public int getSolidness() {
-        return solidness;
+    public int getVelocityToBeGiven() {
+        return velocityToBeGiven;
     }
 
-    /*private Rectangle cloneThisRectangle(Rectangle rectangle){
-        return new Rectangle(rectangle.x, rectangle.y,rectangle.width,rectangle.height);
-    }*/
+    public int getaToBeGiven() {
+        return aToBeGiven;
+    }
 
     Spring(GamePanel gp){
-
+        super(gp,null,null,0,0,0,0,0,0,0);
         int height=22;
         int width=30;
 
-        screenRect = new Rectangle(0,0,width,height);
+        mainRect = new Rectangle(0,0,width,height);
         solidArea = new Rectangle(width*0,(int)(height*0.38),(int)(width*1),(int)(height*0.40));
 
         //size  -> width:21 height:44
@@ -45,21 +41,24 @@ public class Spring {
 
 
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/spring_comp.png"));
-            image1 = ImageIO.read(getClass().getResourceAsStream("/objects/spring.png"));
+            comp = ImageIO.read(getClass().getResourceAsStream("/objects/spring_comp.png"));
+            unComp = ImageIO.read(getClass().getResourceAsStream("/objects/spring.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
+    @Override
     public void update(){
+
 
 
     }
 
+    @Override
     public void draw(Graphics2D g2){
-        g2.drawImage(image, screenRect.x, screenRect.y, screenRect.width, screenRect.height,null);
+        g2.drawImage(image, mainRect.x, mainRect.y, mainRect.width, mainRect.height,null);
     }
 
 

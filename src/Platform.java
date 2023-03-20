@@ -1,42 +1,25 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Platform {
-
-    private final Rectangle screenRect;
-
-    private final BufferedImage image;
+public class Platform extends Asset {
 
     private final Rectangle solidArea;
 
     private final int velocityToBeGiven = -8;
     private final int aToBeGiven = 1;
 
-    public Rectangle getSolidArea() {
-        return solidArea;
-    }
-
-    public Rectangle getScreenRect(){return screenRect;}
-
-    public int getVelocityToBeGiven() {
-        return velocityToBeGiven;
-    }
-    public int getaToBeGiven() {
-        return aToBeGiven;
-    }
 
     /*private Rectangle cloneThisRectangle(Rectangle rectangle){
         return new Rectangle(rectangle.x, rectangle.y,rectangle.width,rectangle.height);
     }*/
 
     Platform(GamePanel gp){
-
+       super(gp,null,null,0,0,0,0,0,0,0);
        int height=23;
        int width=90;
 
-        screenRect = new Rectangle(0,0,width,height);
+        mainRect = new Rectangle(0,0,width,height);
         solidArea = new Rectangle(0,0,width,height/4);
 
         try {
@@ -46,13 +29,22 @@ public class Platform {
         }
 
     }
-
+    public Rectangle getSolidArea() {
+        return solidArea;
+    }
+    public int getVelocityToBeGiven() {
+        return velocityToBeGiven;
+    }
+    public int getAToBeGiven() {
+        return aToBeGiven;
+    }
+    @Override
     public void update(){
 
     }
-
+    @Override
     public void draw(Graphics2D g2){
-        g2.drawImage(image, screenRect.x, screenRect.y, screenRect.width, screenRect.height,null);
+        g2.drawImage(image, mainRect.x, mainRect.y, mainRect.width, mainRect.height,null);
     }
 
 
