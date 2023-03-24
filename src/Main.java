@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,6 +21,31 @@ public class Main {
 
 
 
-
     }
 }
+
+
+
+interface B{
+
+    public default void x(){
+        System.out.println("x");
+    }
+
+}
+
+interface C{
+
+}
+
+class A implements B,C {
+
+
+    A(){x();}
+
+    @Override
+    public void x() {
+        System.out.println("s");
+    }
+}
+

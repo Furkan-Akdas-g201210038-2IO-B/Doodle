@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -22,8 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 80;
     Thread gameThread;
     Observer observer ;
-
-    Executor executor;
+    DoodleExecutor doodleExecutor;
     KeyHandler keyHandler = new KeyHandler();
     WorldCreator worldCreator = new WorldCreator(this);
 
@@ -47,9 +45,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer = new Observer(this);
 
-        executor = new Executor(this);
+        doodleExecutor = new DoodleExecutor(this);
+
 
         worldCreator.placePlatforms();
+
     }
 
     public void startGameThread(){
@@ -99,7 +99,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer.observe();
 
-        executor.execute();
+        doodleExecutor.execute();
 
         assetManager.update();
     }

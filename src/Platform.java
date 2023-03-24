@@ -2,25 +2,22 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
-public class Platform extends Asset {
+public class Platform extends Element {
 
-    private final Rectangle solidArea;
-
-    private final int velocityToBeGiven = -8;
-    private final int aToBeGiven = 1;
-
-
-    /*private Rectangle cloneThisRectangle(Rectangle rectangle){
-        return new Rectangle(rectangle.x, rectangle.y,rectangle.width,rectangle.height);
-    }*/
-
+    Platform(Platform platform){
+        super(platform);
+    }
+    Platform(){}
     Platform(GamePanel gp){
-       super(gp,null,null,0,0,0,0,0,0,0);
+
+       setGp(gp);
+       setVelocityYToBeGiven(-8);
+       setAToBeGiven(1);
        int height=23;
        int width=90;
 
         mainRect = new Rectangle(0,0,width,height);
-        solidArea = new Rectangle(0,0,width,height/4);
+        solidArea = new Rectangle(0,0,width,height/8);
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/platforms/greenPlatform.png"));
@@ -29,23 +26,5 @@ public class Platform extends Asset {
         }
 
     }
-    public Rectangle getSolidArea() {
-        return solidArea;
-    }
-    public int getVelocityToBeGiven() {
-        return velocityToBeGiven;
-    }
-    public int getAToBeGiven() {
-        return aToBeGiven;
-    }
-    @Override
-    public void update(){
-
-    }
-    @Override
-    public void draw(Graphics2D g2){
-        g2.drawImage(image, mainRect.x, mainRect.y, mainRect.width, mainRect.height,null);
-    }
-
 
 }

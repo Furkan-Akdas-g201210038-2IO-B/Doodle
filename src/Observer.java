@@ -4,18 +4,25 @@ public class Observer {
 
     private GamePanel gp;
     private Doodle doodle;
-    private ArrayList<Platform> platforms;
+    private ArrayList<Element> elements;
+
+    //private Doodle clonedDoodle;
+   // private ArrayList<Element> clonedElements=new ArrayList<>();
     public int earnedVelocity;
     public int earnedA;
 
-   // AssetManager assetManager;
+    AssetManager assetManager;
 
     Observer(GamePanel gp){
 
         this.gp=gp;
-        doodle = this.gp.assetManager.doodle;
-        platforms = this.gp.assetManager.platforms;
+        doodle = this.gp.assetManager.getDoodle();
+        elements=this.gp.assetManager.getElements();
+        assetManager=this.gp.assetManager;
+
     }
+
+
 
     public void observe(){
 
@@ -28,27 +35,32 @@ public class Observer {
         doodle.getFoots().x =doodle.getFoots().x + doodle.getMainRect().x;
         doodle.getFoots().y =doodle.getFoots().y + doodle.getMainRect().y;
 
-        for (Platform platform : platforms){
+        for (Element element : elements){
 
-            int tempXPlatform = platform.getSolidArea().x;
-            int tempYPlatform = platform.getSolidArea().y;
+            int tempXPlatform = element.getSolidArea().x;
+            int tempYPlatform = element.getSolidArea().y;
 
-            platform.getSolidArea().x = platform.getMainRect().x + platform.getSolidArea().x;
-            platform.getSolidArea().y = platform.getMainRect().y + platform.getSolidArea().y;
+            element.getSolidArea().x = element.getMainRect().x + element.getSolidArea().x;
+            element.getSolidArea().y = element.getMainRect().y + element.getSolidArea().y;
 
-            if(doodle.getFoots().intersects(platform.getSolidArea())){
-                earnedVelocity = platform.getVelocityToBeGiven();
-                earnedA = platform.getAToBeGiven();
+            if(doodle.getFoots().intersects(element.getSolidArea())){
+
+                earnedVelocity = element.getVelocityYToBeGiven();
+                earnedA = element.getAToBeGiven();
 
             }
 
-            platform.getSolidArea().x = tempXPlatform;
-            platform.getSolidArea().y = tempYPlatform;
+
+
+            element.getSolidArea().x = tempXPlatform;
+            element.getSolidArea().y = tempYPlatform;
 
         }
 
         doodle.getFoots().x =tempXDoodle;
         doodle.getFoots().y =tempYDoodle;
+
+
 
     }
 
