@@ -1,15 +1,23 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-public abstract class Asset {
+public abstract class Asset implements ForceTaker {
     GamePanel gp=null;
     Rectangle mainRect=new Rectangle();
     BufferedImage image=null;
 
-    Velocity velocity=new Velocity();
+    final Velocity velocity=new Velocity();
 
-    Asset affectedAsset;
+    final Force force = new Force();
 
+    SettledFeatures settledFeatures = new SettledFeatures();
+
+    ArrayList<Asset> connectedAssets = new ArrayList<>();
+
+    ArrayList<Asset> collidedAssets = new ArrayList<>();
+
+    Boundary boundary;
     //public Asset(){}
 
     Asset(Asset asset){
@@ -23,10 +31,16 @@ public abstract class Asset {
 
         //velocity i kolonla
 
-        this.affectedAsset =asset.affectedAsset;
+        //this.connectedAsset =asset.connectedAsset;
     }
 
+
+
     public Asset(){}
+
+    public SettledFeatures getSettledFeatures() {
+        return settledFeatures;
+    }
 
     public GamePanel getGp() {
         return gp;
@@ -49,6 +63,7 @@ public abstract class Asset {
     public int getX(){return this.mainRect.x;}
     public int getY(){return this.mainRect.y;}
 
+
     public void setSize(int width,int height){this.mainRect.setSize(width,height);}
 
     public int getWidth(){return this.mainRect.width;}
@@ -62,103 +77,201 @@ public abstract class Asset {
         this.image = image;
     }
 
-    public int getDefaultVelocityX() {
-        return velocity.getDefaultVelocityX();
-    }
-
-    public void setDefaultVelocityX(int defaultVelocityX) {
-        velocity.setDefaultVelocityX(defaultVelocityX);
-    }
-
-    public int getDefaultVelocityY() {
-        return velocity.getDefaultVelocityY();
-    }
-
-    public void setDefaultVelocityY(int defaultVelocityY) {
-        velocity.setDefaultVelocityY(defaultVelocityY);
-    }
-
     public int getVelocityX() {
-        return velocity.getVelocityX();
+        return velocity.getX();
     }
-
     public void setVelocityX(int velocityX) {
-        velocity.setVelocityX(velocityX);
+        velocity.setX(velocityX);
     }
-
     public int getVelocityY() {
-        return velocity.getVelocityY();
+        return velocity.getY();
     }
-
     public void setVelocityY(int velocityY) {
-        velocity.setVelocityY(velocityY);
+        velocity.setY(velocityY);
+    }
+
+
+    public int getAX() {
+        return force.getAX();
+    }
+
+    public void setAX(int aX) {
+        force.setAX(aX);
+    }
+
+    public int getAY() {
+        return force.getAY();
+    }
+
+    public void setAY(int aY) {
+        force.setAY(aY);
+    }
+
+    public int getAWeaknessX() {
+        return force.getAWeaknessX();
+    }
+
+    public void setAWeaknessX(int aWeaknessX) {
+        force.setAWeaknessX(aWeaknessX);
+    }
+
+    public int getAWeaknessY() {
+        return force.getAWeaknessY();
+    }
+
+    public void setAWeaknessY(int aWeaknessY) {
+        force.setAWeaknessY(aWeaknessY);
+    }
+
+    public int getACounterX() {
+        return force.getACounterX();
+    }
+
+    public void setACounterX(int aCounterX) {
+        force.setACounterX(aCounterX);
+    }
+
+    public int getACounterY() {
+        return force.getACounterY();
+    }
+
+    public void setACounterY(int aCounterY) {
+        force.setACounterY(aCounterY);
+    }
+
+    public void clearConnectedAssets(){connectedAssets.clear();}
+    public void addConnectedAsset(Asset connectedAsset){
+        connectedAssets.add(connectedAsset);
+    }
+
+    public void clearCollidedAssets(){collidedAssets.clear();}
+    public void addCollidedAsset(Asset collidedAsset){
+        collidedAssets.add(collidedAsset);
+    }
+
+    public int getLeft() {
+        return boundary.getLeft();
+    }
+
+    public void setLeft(int xLeft) {
+        boundary.setLeft(xLeft);
+    }
+
+    public int getRight() {
+        return boundary.getRight();
+    }
+
+    public void setRight(int xRight) {
+        boundary.setRight(xRight);
+    }
+
+    public int getUp() {
+        return boundary.getUp();
+    }
+
+    public void setUp(int yUp) {
+        boundary.setUp(yUp);
+    }
+
+    public int getDown() {
+        return boundary.getDown();
+    }
+
+    public void setDown(int yDown) {
+        boundary.setDown(yDown);
+    }
+
+    Rectangle solidArea;
+
+    public void setSolidArea(Rectangle solidArea) {
+        this.solidArea = solidArea;
+    }
+
+    public Rectangle getSolidArea() {
+        return solidArea;
+    }
+
+    public void cloneVelocityToThisVelocity(Velocity velocity){
+
+        setVelocityX(velocity.getX());
+        setVelocityY(velocity.getY());
 
     }
 
-    public int getA() {
-        return velocity.getA();
+    public void cloneForceToThisForce(Force force){
+        setAX(force.getAX());
+        setAY(force.getAY());
+        setAWeaknessX(force.getAWeaknessX());;
+        setAWeaknessY(force.getAWeaknessY());;
+        setACounterX(force.getACounterX());
+        setACounterY(force.getACounterY());
     }
 
-    public void setA(int a) {
-        velocity.setA(a);
+    @Override
+    public void takeForce(Force force) {
+        cloneForceToThisForce(force);
     }
 
-    public int getAWeakness() {
-        return velocity.getAWeakness();
-    }
+    public abstract void affect();
 
-    public void setAWeakness(int aWeakness) {
-        velocity.setAWeakness(aWeakness);
-    }
+    public  void update(){
 
-    public int getACounter() {
-        return velocity.getACounter();
-    }
+        setACounterY(getACounterY()+1);
 
-    public void setACounter(int aCounter) {
-        velocity.setACounter(aCounter);
-    }
+        if(getACounterY()%getAWeaknessY()==0){
 
-    public Asset getAffectedAsset() {
-        return affectedAsset;
-    }
-    public void setAffectedAsset(Asset affectedAsset){
-        this.affectedAsset = affectedAsset;
-    }
-    public boolean containsAffectedAsset(){
-        return affectedAsset !=null;
-    }
+            velocity.setY(getVelocityY()+ getAY()); ;
 
-    public final void update(){
-
-        int newX = mainRect.x + getVelocityX();
-        int newY = mainRect.y + getVelocityY();
-
-        mainRect.setLocation(newX,newY);
-
-        setACounter(getACounter()+1);
-
-        if(getACounter()%getAWeakness()==0){
-
-            velocity.setVelocityY(getVelocityY()+ getA()); ;
-
-            setACounter(0);
+            setACounterY(0);
         }
 
-        mainRect.setSize(mainRect.width,mainRect.height);
+        setACounterX(getACounterX()+1);
+
+        if(getACounterX()%getAWeaknessX()==0){
+
+            velocity.setX(getVelocityX()+ getAX()); ;
+
+            setACounterX(0);
+        }
+
+
+        if(settledFeatures.isVelocityXSettled()){
+            setVelocityX(settledFeatures.getVelocityX());
+        }
+
+        if(settledFeatures.isVelocityYSettled()){
+            setVelocityY(settledFeatures.getVelocityY());
+        }
+
+
+        int newX = getX() + getVelocityX();
+        int newY = getY() + getVelocityY();
+
+        setLocation(newX,newY);
+
+
+        if(settledFeatures.isLocationSettled()){
+            setLocation(settledFeatures.getX(), settledFeatures.getX());
+        }
+
+
+        setSize(getWidth(),getHeight());
 
         setImage(image);
 
 
+        settledFeatures.update();
     }
-    public final void draw(Graphics2D g2){
+    public  void draw(Graphics2D g2){
 
-        g2.drawImage(image, mainRect.x, mainRect.y, mainRect.width, mainRect.height, null);
+        int screenX = getX() - getGp().screen.getX();
+        int screenY = getY() - getGp().screen.getY();
+
+
+        if(screenY + 300 > 0 && screenY - 300 < getGp().screen.getHeight()){
+            g2.drawImage(image, screenX, screenY, mainRect.width, mainRect.height, null);
+        }
 
     }
-
-
-    /*private int spriteCounter=0;
-    private int spriteTime=40;*/
 
 }

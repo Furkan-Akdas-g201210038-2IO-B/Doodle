@@ -10,30 +10,33 @@ public class GamePanel extends JPanel implements Runnable {
     public final int unitSize = 15;
     public final int colNum = 34;
     public final int rowNum = 50;
-    public final int screenWidth =colNum * unitSize;
-    public final int screenHeight =rowNum * unitSize;
-    public final int worldWith = 0;
-    public final int WorldHeight = 0;
+    public final int gpWidth =colNum * unitSize;
+    public final int gpHeight =rowNum * unitSize;
 
     private final BufferedImage bg;
 
     //SYSTEM
-    int FPS = 80;
+    int FPS = 10;
     Thread gameThread;
     Observer observer ;
     DoodleExecutor doodleExecutor;
     KeyHandler keyHandler = new KeyHandler();
-    WorldCreator worldCreator = new WorldCreator(this);
+    WorldCreator worldCreator;
+
+    Screen screen;
 
     //ASSETS
     AssetManager assetManager ;
 
     public GamePanel(){
-        this.setPreferredSize(new Dimension(screenWidth,screenHeight));
+        this.setPreferredSize(new Dimension(gpWidth, gpHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+
+        //width 510
+        //height 750
 
         try {
             bg= ImageIO.read(getClass().getResourceAsStream("/backGround/bg.png"));
@@ -43,12 +46,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         assetManager = new AssetManager(this);
 
+        worldCreator = new WorldCreator(this);
+
         observer = new Observer(this);
 
         doodleExecutor = new DoodleExecutor(this);
 
+        screen = new Screen(this);
 
-        worldCreator.placePlatforms();
 
     }
 
@@ -99,9 +104,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer.observe();
 
+        assetManager.update();
+
         doodleExecutor.execute();
 
-        assetManager.update();
+        screen.update();
     }
 
     @Override
@@ -110,7 +117,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.drawImage(bg,0,0,screenWidth,screenHeight,null);
+        g2.drawImage(bg,0,0, gpWidth, gpHeight,null);
 
         assetManager.draw(g2);
 

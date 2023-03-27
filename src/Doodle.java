@@ -1,16 +1,17 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.beans.ConstructorProperties;
 import java.io.IOException;
 
-public class Doodle extends Asset {
+public class Doodle extends Asset implements VelocityTaker{
 
-    private  Rectangle foots;
     private final BufferedImage rightImage;
     private final BufferedImage rightImage1;
     private final BufferedImage leftImage;
     private final BufferedImage leftImage1;
+
+    private final int stopVelocity=0;
+    private final int moveVelocity=4;
 
     {
         try {
@@ -27,23 +28,24 @@ public class Doodle extends Asset {
 
    Doodle(){}
 
-    Doodle(Doodle doodle){
-        super(doodle);
-        this.foots=(Rectangle)doodle.foots.clone();
-    }
     Doodle(GamePanel gp){
 
         setGp(gp);
-        setDefaultVelocityX(5);
-        super.setVelocityY(-2);;
-        setA(1);
 
-        setAWeakness(10);
+        super.setVelocityY(-5);;
+
+        setAY(1);
+        setAWeaknessY(7);
 
         int height = 90;
         int width = 90;
-        mainRect = new Rectangle(200,100,width,height);
-        foots = new Rectangle((int)(width*0.27),(int)(height*0.86),(int)(width*0.45),(int)(width*0.13));
+        mainRect = new Rectangle(200,4500,width,height);
+
+        //!!! mainrect in boyutu değiştiğinde foots un boyutu da değişmeli
+        solidArea = new Rectangle((int)(width*0.27),(int)(height*0.86),(int)(width*0.45),(int)(width*0.13));
+
+        //!!! mainrect in boyutu değiştiğinde boundary nin değerleri de değişmeli
+        boundary = new Boundary(- mainRect.width/2,gp.gpWidth - mainRect.width/2,-1,-1);
 
         //width 62 height 60
 
@@ -55,23 +57,6 @@ public class Doodle extends Asset {
 
     }
 
-    public Rectangle getFoots() {
-        return foots;
-    }
-
-    public void setFoots(Rectangle foots) {
-        this.foots = foots;
-    }
-
-    @Override
-    public void setVelocityY(int newVelocityY){
-
-        if(headingDown()) {
-            super.setVelocityY(newVelocityY);
-        }
-    }
-
-
     public boolean headingDown(){
         return getVelocityY() > 0;
     }
@@ -80,19 +65,39 @@ public class Doodle extends Asset {
         return getVelocityY() <= 0;
     }
 
-    public void beAffectedByAffectedObject(){
+    @Override
+    public void affect() {
 
-        if(affectedAsset instanceof Platform){
+        for(Asset collidedAsset : collidedAssets){
 
-           // if(((Platform) affectedAsset).velocityYToBeGiven)
-
+            if(collidedAsset instanceof CanBeActivated){
+            activate((CanBeActivated) collidedAsset);
+            }
         }
+
+        clearCollidedAssets();
+
+    }
+
+    public void activate(CanBeActivated canBeActivated) {
+        canBeActivated.beActivated();
+    }
+
+    /*
+    @Override
+    public void takeVelocity(Velocity givenVelocity) {
+        cloneVelocityToThisVelocity(givenVelocity);
+    }*/
+    @Override
+    public void takeVelocity(Velocity givenVelocity) {
+
+        settledFeatures.cloneVelocityToThisVelocity(givenVelocity);
 
     }
 
     public void executeWhenRightPressed(){
 
-        setVelocityX(Math.abs(getDefaultVelocityX()));
+        setVelocityX(moveVelocity);
 
         if(headingUp())
             image = rightImage1;
@@ -103,7 +108,7 @@ public class Doodle extends Asset {
 
     public void executeWhenLeftPressed(){
 
-        setVelocityX(- Math.abs(getDefaultVelocityX()));
+        setVelocityX(- moveVelocity);
 
         if(headingUp())
             image = leftImage1;
@@ -112,7 +117,7 @@ public class Doodle extends Asset {
     }
 
     public void executeWhenNonePressed(){
-        setVelocityX(0);
+        setVelocityX(stopVelocity);
 
         if(image.equals(rightImage) || image.equals(rightImage1)){
 
@@ -131,8 +136,19 @@ public class Doodle extends Asset {
         }
     }
 
+    @Override
+    public void update() {
+        super.update();
 
+        if(mainRect.x  > boundary.getRight()){
 
+            mainRect.setLocation(boundary.getLeft(),mainRect.y);
+
+        }else if(mainRect.x < boundary.getLeft()){
+
+            mainRect.setLocation(boundary.getRight(),mainRect.y);
+        }
+    }
 
 
 }

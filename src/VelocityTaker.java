@@ -1,5 +1,5 @@
 public interface VelocityTaker {
 
-        void takeVelocity(Velocity velocity);
+        void takeVelocity(Velocity givenVelocity);
 
 }

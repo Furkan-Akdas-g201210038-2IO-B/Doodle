@@ -3,76 +3,91 @@ import java.util.ArrayList;
 
 public class AssetManager {
     GamePanel gp;
-    ArrayList<Platform> platforms = new ArrayList<>();
-  //  ArrayList<Spring> springs = new ArrayList<>();
-    final Doodle doodle;
-    ArrayList<Element> elements = new ArrayList<>();
-    private final int platformNum =8;
+    ArrayList<Asset> assets = new ArrayList<>();
+    Doodle doodle;
+    ArrayList<Asset> steps = new ArrayList<>();
 
-
-    private AssetManager(Doodle doodle,ArrayList<Platform> platforms){
-        this.doodle=doodle;
-        this.platforms=platforms;
-    }
+    ArrayList<Asset> elements = new ArrayList<>();
     AssetManager(GamePanel gp){
         this.gp=gp;
+    }
 
+    public Doodle createDoodle(){
         doodle = new Doodle(gp);
 
-        createPlatforms(gp);
+        assets.add(doodle);
 
-
+        return doodle;
     }
-    private void createPlatforms(GamePanel gp) {
-        for (int i = 0; i< platformNum; i++){
-            Platform platform = new Platform(gp);
-            platforms.add(platform);
-            elements.add(platform);
-        }
 
+    public Platform createStillPlatform(){
+        Platform newPlatform = new Platform(gp);
+
+        steps.add(newPlatform);
+        assets.add(newPlatform);
+        elements.add(newPlatform);
+
+        return newPlatform;
+    }
+
+    public Platform createMoveblePlatform(){
+        Platform newPlatform = new Platform(gp);
+
+        newPlatform.moveAlongX();
+
+        steps.add(newPlatform);
+        assets.add(newPlatform);
+        elements.add(newPlatform);
+
+        return newPlatform;
+    }
+
+    public Platform createPlatform1(){
+        Platform newPlatform = new Platform(gp);
+
+        newPlatform.moveAlongX();
+
+        steps.add(newPlatform);
+        assets.add(newPlatform);
+        elements.add(newPlatform);
+
+        return newPlatform;
+    }
+
+    public Spring createSpring(){
+        Spring newSpring = new Spring(gp);
+
+        elements.add(newSpring);
+        assets.add(newSpring);
+
+        return newSpring;
     }
 
     public Doodle getDoodle(){
         return doodle;
     }
 
-    public ArrayList<Element> getElements(){
+    public ArrayList<Asset> getSteps() {
+        return steps;
+    }
+
+    public ArrayList<Asset> getElements() {
         return elements;
     }
 
-   /* public Doodle getClonedDoodle(){
-        Doodle clonedDoodle = new Doodle(doodle);
-
-        return clonedDoodle;
-    }*/
-
-
-   /* public ArrayList<Element> getClonedElements(){
-
-        ArrayList<Element> clonedElements= new ArrayList<>();
-
-        return clonedElements;
-    }*/
-
     public void update(){
 
-        for(Platform platform : platforms){
-            platform.update();
-        }
+        for (Asset asset : assets)
+            asset.update();
 
-        doodle.update();
-
+        System.out.println(doodle.getVelocityY()); ;
 
     }
 
     public void draw(Graphics2D g2){
 
-        for(Platform platform : platforms){
-            platform.draw(g2);
-        }
-
-        doodle.draw(g2);
-
+        for (Asset asset : assets)
+            asset.draw(g2);
     }
 
 }

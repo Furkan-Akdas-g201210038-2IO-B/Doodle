@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
+
 
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,32 +22,27 @@ public class Main {
         gamePanel.startGameThread();
 
 
-
     }
 }
 
+interface A  {
 
+
+
+}
 
 interface B{
 
-    public default void x(){
-        System.out.println("x");
-    }
 
 }
 
-interface C{
+class C extends D{
 
 }
 
-class A implements B,C {
+class D{
 
-
-    A(){x();}
-
-    @Override
-    public void x() {
-        System.out.println("s");
-    }
 }
+
+
 

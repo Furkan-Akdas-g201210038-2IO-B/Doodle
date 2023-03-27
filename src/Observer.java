@@ -4,12 +4,7 @@ public class Observer {
 
     private GamePanel gp;
     private Doodle doodle;
-    private ArrayList<Element> elements;
-
-    //private Doodle clonedDoodle;
-   // private ArrayList<Element> clonedElements=new ArrayList<>();
-    public int earnedVelocity;
-    public int earnedA;
+    private ArrayList<Asset> elements;
 
     AssetManager assetManager;
 
@@ -17,50 +12,41 @@ public class Observer {
 
         this.gp=gp;
         doodle = this.gp.assetManager.getDoodle();
-        elements=this.gp.assetManager.getElements();
+        elements =this.gp.assetManager.getElements();
         assetManager=this.gp.assetManager;
 
     }
 
-
-
     public void observe(){
 
-        earnedVelocity=0;
-        earnedA=1;
+        int tempXDoodle=doodle.getSolidArea().x;
+        int tempYDoodle=doodle.getSolidArea().y;
 
-        int tempXDoodle=doodle.getFoots().x;
-        int tempYDoodle=doodle.getFoots().y;
+        doodle.getSolidArea().x =doodle.getSolidArea().x + doodle.getMainRect().x;
+        doodle.getSolidArea().y =doodle.getSolidArea().y + doodle.getMainRect().y;
 
-        doodle.getFoots().x =doodle.getFoots().x + doodle.getMainRect().x;
-        doodle.getFoots().y =doodle.getFoots().y + doodle.getMainRect().y;
+        for (Asset asset : elements){
 
-        for (Element element : elements){
+            int tempXPlatform = asset.getSolidArea().x;
+            int tempYPlatform = asset.getSolidArea().y;
 
-            int tempXPlatform = element.getSolidArea().x;
-            int tempYPlatform = element.getSolidArea().y;
+            asset.getSolidArea().x = asset.getMainRect().x + asset.getSolidArea().x;
+            asset.getSolidArea().y = asset.getMainRect().y + asset.getSolidArea().y;
 
-            element.getSolidArea().x = element.getMainRect().x + element.getSolidArea().x;
-            element.getSolidArea().y = element.getMainRect().y + element.getSolidArea().y;
+            if(doodle.getSolidArea().intersects(asset.getSolidArea())){
 
-            if(doodle.getFoots().intersects(element.getSolidArea())){
-
-                earnedVelocity = element.getVelocityYToBeGiven();
-                earnedA = element.getAToBeGiven();
+                doodle.addCollidedAsset(asset);
+                asset.addCollidedAsset(doodle);
 
             }
 
-
-
-            element.getSolidArea().x = tempXPlatform;
-            element.getSolidArea().y = tempYPlatform;
+            asset.getSolidArea().x = tempXPlatform;
+            asset.getSolidArea().y = tempYPlatform;
 
         }
 
-        doodle.getFoots().x =tempXDoodle;
-        doodle.getFoots().y =tempYDoodle;
-
-
+         doodle.getSolidArea().x =tempXDoodle;
+         doodle.getSolidArea().y =tempYDoodle;
 
     }
 

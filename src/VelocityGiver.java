@@ -1,8 +1,25 @@
-public interface VelocityGiver {
+import java.awt.*;
 
+public abstract class VelocityGiver extends Asset {
 
-        default void giveVelocity(VelocityTaker velocityTaker,Velocity velocity){
-            velocityTaker.takeVelocity(velocity);
-        }
+    Velocity velocityToBeGiven;
+
+    VelocityGiver(VelocityGiver velocityGiver){
+        super(velocityGiver);
+
+        this.solidArea = (Rectangle) velocityGiver.solidArea.clone();
+
+    }
+    public VelocityGiver(){
+        velocityToBeGiven= new Velocity();
+    }
+    public int getVelocityYToBeGiven() {
+        return velocityToBeGiven.getY();
+    }
+
+    public void setVelocityYToBeGiven(int velocityYToBeGiven) {
+        velocityToBeGiven.setY(velocityYToBeGiven); ;
+    }
+
 
 }
