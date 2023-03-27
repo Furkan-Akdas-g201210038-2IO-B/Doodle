@@ -18,7 +18,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
        setGp(gp);
        setAY(0);
 
-       setVelocityYToBeGiven(-8);
+       setVelocityYToBeGiven(-7);
 
 
        int height=23;
@@ -57,6 +57,10 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     void giveVelocity(VelocityTaker velocityTaker) {
 
         Velocity velocityToBeGiven = new Velocity(this.velocityToBeGiven);
+
+        if(velocityTaker instanceof  Asset){
+            velocityToBeGiven.setX(((Asset) velocityTaker).getVelocityX());
+        }
 
         if(velocityTaker instanceof Doodle){
             if(((Doodle) velocityTaker).headingDown())

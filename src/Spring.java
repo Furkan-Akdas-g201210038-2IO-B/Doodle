@@ -30,6 +30,10 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
 
             Velocity velocityToBeGiven = new Velocity(this.velocityToBeGiven);
 
+            if(velocityTaker instanceof  Asset){
+                velocityToBeGiven.setX(((Asset) velocityTaker).getVelocityX());
+            }
+
             if(velocityTaker instanceof Doodle){
                 if(((Doodle) velocityTaker).headingDown()){
                     velocityTaker.takeVelocity(velocityToBeGiven);

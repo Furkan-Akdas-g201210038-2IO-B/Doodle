@@ -89,12 +89,6 @@ public abstract class Asset implements ForceTaker {
         setVelocityYSettled(true);
     }
 
-
-
-
-
-
-
     public void setLocationForUpdate(int x,int y){
         this.mainRect.setLocation(x,y);
         setLocationXSettled(true);
@@ -281,9 +275,14 @@ public abstract class Asset implements ForceTaker {
 
     public void setVelocityXSettled(boolean velocityXSettled) {
         isVelocityXSettled = velocityXSettled;
+        if(this instanceof Doodle) {
+
+        }
     }
 
     public void cloneVelocityToThisVelocity(Velocity velocity){
+
+
 
         setVelocityX(velocity.getX());
         setVelocityY(velocity.getY());
@@ -308,48 +307,55 @@ public abstract class Asset implements ForceTaker {
 
     public  void update(){
 
-        setACounterY(getACounterY()+1);
 
-        if(getACounterY()%getAWeaknessY()==0){
 
-            setVelocityY(getVelocityY()+ getAY()); ;
+        if(!(isLocationYSettled() || isVelocityYSettled())){
 
-            setACounterY(0);
+            setACounterY(getACounterY()+1);
+
+            if(getACounterY()%getAWeaknessY()==0){
+
+                setVelocityYForUpdate(getVelocityY()+ getAY()); ;
+
+                setACounterY(0);
+            }
+
         }
 
-        setACounterX(getACounterX()+1);
 
-        if(getACounterX()%getAWeaknessX()==0){
 
-            setVelocityX(getVelocityX()+ getAX()); ;
+        if(!(isLocationXSettled() || isVelocityXSettled())){
 
-            setACounterX(0);
+
+            setACounterX(getACounterX()+1);
+
+            if(getACounterX()%getAWeaknessX()==0){
+
+                setVelocityXForUpdate(getVelocityX()+ getAX()); ;
+
+                setACounterX(0);
+            }
+
         }
 
-/*
-        if(changesBeforeUpdate.isVelocityXSettled()){
-            setVelocityX(changesBeforeUpdate.getVelocityX());
+        if(!isLocationXSettled()){
+            int newX = getX() + getVelocityX();
+            setLocationXForUpdate(newX);
         }
 
-        if(changesBeforeUpdate.isVelocityYSettled()){
-            setVelocityY(changesBeforeUpdate.getVelocityY());
-        }*/
-
-
-        int newX = getX() + getVelocityX();
-        int newY = getY() + getVelocityY();
-
-        setLocation(newX,newY);
-
-
-       /* if(changesBeforeUpdate.isLocationSettled()){
-            setLocation(changesBeforeUpdate.getX(), changesBeforeUpdate.getX());
-        }*/
-
+        if(!isLocationYSettled()){
+            int newY = getY() + getVelocityY();
+            setLocationYForUpdate(newY);
+        }
 
         setSize(getWidth(),getHeight());
 
         setImage(image);
+
+        setVelocityXSettled(false);
+        setVelocityYSettled(false);
+        setLocationXSettled(false);
+        setLocationYSettled(false);
 
     }
     public  void draw(Graphics2D g2){

@@ -35,7 +35,7 @@ public class Doodle extends Asset implements VelocityTaker{
         setVelocityY(-5);;
 
         setAY(1);
-        setAWeaknessY(7);
+        setAWeaknessY(6);
 
         int height = 90;
         int width = 90;
@@ -95,9 +95,21 @@ public class Doodle extends Asset implements VelocityTaker{
 
     }
 
+    @Override
+    public void takeVelocityX(Velocity givenVelocityX) {
+
+    }
+
+    @Override
+    public void takeVelocityY(Velocity givenVelocityY) {
+
+    }
+
     public void executeWhenRightPressed(){
 
-        setVelocityX(moveVelocity);
+        //setVelocityX(moveVelocity);
+        setAX(1);
+        setAWeaknessX(4);
 
         if(headingUp())
             image = rightImage1;
@@ -108,16 +120,20 @@ public class Doodle extends Asset implements VelocityTaker{
 
     public void executeWhenLeftPressed(){
 
-        setVelocityX(- moveVelocity);
+        //setVelocityX(- moveVelocity);
+        setAX(-1);
+        setAWeaknessX(4);
 
         if(headingUp())
             image = leftImage1;
         else if(headingDown())
             image = leftImage;
+
     }
 
     public void executeWhenNonePressed(){
-        setVelocityX(stopVelocity);
+
+
 
         if(image.equals(rightImage) || image.equals(rightImage1)){
 
@@ -136,6 +152,20 @@ public class Doodle extends Asset implements VelocityTaker{
         }
     }
 
+    public void executeWhenRightReleased(){
+
+        setAX(0);
+
+
+    }
+
+    public void executeWhenLeftReleased() {
+
+        setAX(0);
+
+
+    }
+
     @Override
     public void update() {
         super.update();
@@ -149,6 +179,7 @@ public class Doodle extends Asset implements VelocityTaker{
             setLocation(getRight(),getY());
         }
     }
+
 
 
 }

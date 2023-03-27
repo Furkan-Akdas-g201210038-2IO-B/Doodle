@@ -34,6 +34,14 @@ public class DoodleExecutor {
         else
             assetManager.doodle.executeWhenNonePressed();
 
+        if(!keyHandler.isRightPressed() && !keyHandler.isLeftPressed()){
+            assetManager.doodle.executeWhenRightReleased();
+        }
+
+        /*if(!keyHandler.isLeftPressed()){
+            assetManager.doodle.executeWhenLeftReleased();
+        }*/
+
 
     }
 
