@@ -58,7 +58,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
 
     public void giveLocation(CanBeLocated canBeLocated){
         canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight());
-        System.out.println(getY());
+
     }
     void giveVelocity(VelocityTaker velocityTaker) {
 

@@ -11,14 +11,16 @@ public abstract class Asset implements ForceTaker {
 
     final Force force = new Force();
 
-    SettledFeatures changesBeforeUpdate = new SettledFeatures();
-
     ArrayList<Asset> connectedAssets = new ArrayList<>();
 
     ArrayList<Asset> collidedAssets = new ArrayList<>();
 
     Boundary boundary;
-    //public Asset(){}
+
+    private boolean isLocationXSettled=false;
+    private boolean isLocationYSettled=false;
+    private boolean isVelocityYSettled=false;
+    private boolean isVelocityXSettled=false;
 
     Asset(Asset asset){
         //Buraya Dikkat!!!!!!
@@ -38,9 +40,6 @@ public abstract class Asset implements ForceTaker {
 
     public Asset(){}
 
-    public SettledFeatures getChangesBeforeUpdate() {
-        return changesBeforeUpdate;
-    }
 
     public GamePanel getGp() {
         return gp;
@@ -58,7 +57,10 @@ public abstract class Asset implements ForceTaker {
         this.mainRect = mainRect;
     }
 
-    public void setLocation(int x,int y){this.mainRect.setLocation(x,y);}
+    public void setLocation(int x,int y){
+        this.mainRect.setLocation(x,y);
+
+    }
 
     public int getX(){return this.mainRect.x;}
     public int getY(){return this.mainRect.y;}
@@ -234,14 +236,14 @@ public abstract class Asset implements ForceTaker {
             setACounterX(0);
         }
 
-
+/*
         if(changesBeforeUpdate.isVelocityXSettled()){
             setVelocityX(changesBeforeUpdate.getVelocityX());
         }
 
         if(changesBeforeUpdate.isVelocityYSettled()){
             setVelocityY(changesBeforeUpdate.getVelocityY());
-        }
+        }*/
 
 
         int newX = getX() + getVelocityX();
@@ -250,17 +252,15 @@ public abstract class Asset implements ForceTaker {
         setLocation(newX,newY);
 
 
-        if(changesBeforeUpdate.isLocationSettled()){
+       /* if(changesBeforeUpdate.isLocationSettled()){
             setLocation(changesBeforeUpdate.getX(), changesBeforeUpdate.getX());
-        }
+        }*/
 
 
         setSize(getWidth(),getHeight());
 
         setImage(image);
 
-
-        changesBeforeUpdate.update();
     }
     public  void draw(Graphics2D g2){
 
