@@ -132,7 +132,7 @@ public class Doodle extends Asset implements VelocityTaker{
                 image = leftImage1;
             else if(headingDown())
                 image = leftImage;
-
+//1
         }
     }
 
