@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final BufferedImage bg;
 
     //SYSTEM
-    int FPS = 10;
+    int FPS = 50;
     Thread gameThread;
     Observer observer ;
     DoodleExecutor doodleExecutor;
@@ -109,6 +109,8 @@ public class GamePanel extends JPanel implements Runnable {
         doodleExecutor.execute();
 
         screen.update();
+
+
     }
 
     @Override

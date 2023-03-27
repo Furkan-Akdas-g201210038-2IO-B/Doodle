@@ -15,8 +15,8 @@ public class WorldCreator {
 
     private final int springFrequencyWeakness=1;
 
-//    private final int stepNum = worldHeight/stepMarginY;
-    private final int stepNum = 17;
+    private final int stepNum = worldHeight/stepMarginY;
+ //   private final int stepNum = 17;
 
     public WorldCreator(GamePanel gp){
 
@@ -54,7 +54,7 @@ public class WorldCreator {
 
             int randomX = random.nextInt(gp.gpWidth - platform.getWidth());
 
-            platform.getSettledFeatures().setLocation(randomX,cursorY);
+            platform.setLocation(randomX,cursorY);
 
             cursorY+= stepMarginY;
         }
@@ -64,7 +64,7 @@ public class WorldCreator {
     public void placeDoodle(){
         Doodle doodle = gp.assetManager.createDoodle();
         Asset lastStep = gp.assetManager.getSteps().get(gp.assetManager.getSteps().size() - 1);
-        doodle.settledFeatures.setLocation(lastStep.settledFeatures.getX(),lastStep.settledFeatures.getY() - doodle.getHeight() - 30);
+        doodle.setLocation(lastStep.getX(),lastStep.getY() - doodle.getHeight() - 30);
     }
 
     public int getWorldHeight() {

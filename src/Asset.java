@@ -11,7 +11,7 @@ public abstract class Asset implements ForceTaker {
 
     final Force force = new Force();
 
-    SettledFeatures settledFeatures = new SettledFeatures();
+    SettledFeatures changesBeforeUpdate = new SettledFeatures();
 
     ArrayList<Asset> connectedAssets = new ArrayList<>();
 
@@ -38,8 +38,8 @@ public abstract class Asset implements ForceTaker {
 
     public Asset(){}
 
-    public SettledFeatures getSettledFeatures() {
-        return settledFeatures;
+    public SettledFeatures getChangesBeforeUpdate() {
+        return changesBeforeUpdate;
     }
 
     public GamePanel getGp() {
@@ -235,12 +235,12 @@ public abstract class Asset implements ForceTaker {
         }
 
 
-        if(settledFeatures.isVelocityXSettled()){
-            setVelocityX(settledFeatures.getVelocityX());
+        if(changesBeforeUpdate.isVelocityXSettled()){
+            setVelocityX(changesBeforeUpdate.getVelocityX());
         }
 
-        if(settledFeatures.isVelocityYSettled()){
-            setVelocityY(settledFeatures.getVelocityY());
+        if(changesBeforeUpdate.isVelocityYSettled()){
+            setVelocityY(changesBeforeUpdate.getVelocityY());
         }
 
 
@@ -250,8 +250,8 @@ public abstract class Asset implements ForceTaker {
         setLocation(newX,newY);
 
 
-        if(settledFeatures.isLocationSettled()){
-            setLocation(settledFeatures.getX(), settledFeatures.getX());
+        if(changesBeforeUpdate.isLocationSettled()){
+            setLocation(changesBeforeUpdate.getX(), changesBeforeUpdate.getX());
         }
 
 
@@ -260,7 +260,7 @@ public abstract class Asset implements ForceTaker {
         setImage(image);
 
 
-        settledFeatures.update();
+        changesBeforeUpdate.update();
     }
     public  void draw(Graphics2D g2){
 

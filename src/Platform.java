@@ -47,7 +47,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     }
 
     public void moveAlongX(){
-        settledFeatures.setVelocityX(moveVelocityX);
+        setVelocityX(moveVelocityX);
         //setVelocityX(moveVelocityX);
     }
 

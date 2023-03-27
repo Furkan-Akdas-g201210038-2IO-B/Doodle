@@ -91,7 +91,7 @@ public class Doodle extends Asset implements VelocityTaker{
     @Override
     public void takeVelocity(Velocity givenVelocity) {
 
-        settledFeatures.cloneVelocityToThisVelocity(givenVelocity);
+        cloneVelocityToThisVelocity(givenVelocity);
 
     }
 
@@ -132,7 +132,7 @@ public class Doodle extends Asset implements VelocityTaker{
                 image = leftImage1;
             else if(headingDown())
                 image = leftImage;
-//1
+
         }
     }
 

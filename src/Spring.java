@@ -78,7 +78,7 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
 
     @Override
     public void beLocated(int x, int y,int width,int height) {
-        settledFeatures.setLocation(x + width/2,y - getHeight());
+       setLocation(x + width/2,y - getHeight());
     }
 
     Spring(GamePanel gp){
