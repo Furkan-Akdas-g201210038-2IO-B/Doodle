@@ -9,11 +9,11 @@ public class WorldCreator {
 
     private int cursorY;
     private final int stepMarginY=125;
-    private final int worldHeight =750;
+    private final int worldHeight =1000;
 
     private final int differentPlatformNum=2;
 
-    private final int springFrequencyWeakness=1;
+    private final int springFrequencyWeakness=2;
 
     private final int stepNum = worldHeight/stepMarginY;
  //   private final int stepNum = 17;

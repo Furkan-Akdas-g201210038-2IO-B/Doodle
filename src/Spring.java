@@ -85,7 +85,7 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
 
         setGp(gp);
 
-        setVelocityYToBeGiven(-4);
+        setVelocityYToBeGiven(-9);
 
         int height=30;
         int width=30;

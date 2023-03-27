@@ -80,8 +80,6 @@ public class AssetManager {
         for (Asset asset : assets)
             asset.update();
 
-        System.out.println(doodle.getVelocityY()); ;
-
     }
 
     public void draw(Graphics2D g2){

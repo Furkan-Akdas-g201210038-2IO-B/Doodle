@@ -41,6 +41,7 @@ public abstract class Asset implements ForceTaker {
     public Asset(){}
 
 
+
     public GamePanel getGp() {
         return gp;
     }
@@ -59,12 +60,80 @@ public abstract class Asset implements ForceTaker {
 
     public void setLocation(int x,int y){
         this.mainRect.setLocation(x,y);
-
+        setLocationXSettled(true);
+        setLocationYSettled(true);
     }
+
+    public void setLocationX(int x){
+        this.mainRect.setLocation(x,getY());
+        setLocationXSettled(true);
+    }
+
+    public void setLocationY(int y){
+        this.mainRect.setLocation(getX(),y);
+        setLocationYSettled(true);
+    }
+
+    public int getVelocityX() {
+        return velocity.getX();
+    }
+    public void setVelocityX(int velocityX) {
+        velocity.setX(velocityX);
+        setVelocityXSettled(true);
+    }
+    public int getVelocityY() {
+        return velocity.getY();
+    }
+    public void setVelocityY(int velocityY) {
+        velocity.setY(velocityY);
+        setVelocityYSettled(true);
+    }
+
+
+
+
+
+
+
+    public void setLocationForUpdate(int x,int y){
+        this.mainRect.setLocation(x,y);
+        setLocationXSettled(true);
+        setLocationYSettled(true);
+    }
+
+    public void setLocationXForUpdate(int x){
+        this.mainRect.setLocation(x,getY());
+        setLocationXSettled(true);
+    }
+
+    public void setLocationYForUpdate(int y){
+        this.mainRect.setLocation(getX(),y);
+        setLocationYSettled(true);
+    }
+
+    public void setVelocityXForUpdate(int velocityX) {
+        velocity.setX(velocityX);
+        setVelocityXSettled(true);
+    }
+    public void setVelocityYForUpdate(int velocityY) {
+        velocity.setY(velocityY);
+        setVelocityYSettled(true);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public int getX(){return this.mainRect.x;}
     public int getY(){return this.mainRect.y;}
-
 
     public void setSize(int width,int height){this.mainRect.setSize(width,height);}
 
@@ -79,18 +148,7 @@ public abstract class Asset implements ForceTaker {
         this.image = image;
     }
 
-    public int getVelocityX() {
-        return velocity.getX();
-    }
-    public void setVelocityX(int velocityX) {
-        velocity.setX(velocityX);
-    }
-    public int getVelocityY() {
-        return velocity.getY();
-    }
-    public void setVelocityY(int velocityY) {
-        velocity.setY(velocityY);
-    }
+
 
 
     public int getAX() {
@@ -193,6 +251,38 @@ public abstract class Asset implements ForceTaker {
         return solidArea;
     }
 
+    public boolean isLocationXSettled() {
+        return isLocationXSettled;
+    }
+
+    public void setLocationXSettled(boolean locationXSettled) {
+        isLocationXSettled = locationXSettled;
+    }
+
+    public boolean isLocationYSettled() {
+        return isLocationYSettled;
+    }
+
+    public void setLocationYSettled(boolean locationYSettled) {
+        isLocationYSettled = locationYSettled;
+    }
+
+    public boolean isVelocityYSettled() {
+        return isVelocityYSettled;
+    }
+
+    public void setVelocityYSettled(boolean velocityYSettled) {
+        isVelocityYSettled = velocityYSettled;
+    }
+
+    public boolean isVelocityXSettled() {
+        return isVelocityXSettled;
+    }
+
+    public void setVelocityXSettled(boolean velocityXSettled) {
+        isVelocityXSettled = velocityXSettled;
+    }
+
     public void cloneVelocityToThisVelocity(Velocity velocity){
 
         setVelocityX(velocity.getX());
@@ -222,7 +312,7 @@ public abstract class Asset implements ForceTaker {
 
         if(getACounterY()%getAWeaknessY()==0){
 
-            velocity.setY(getVelocityY()+ getAY()); ;
+            setVelocityY(getVelocityY()+ getAY()); ;
 
             setACounterY(0);
         }
@@ -231,7 +321,7 @@ public abstract class Asset implements ForceTaker {
 
         if(getACounterX()%getAWeaknessX()==0){
 
-            velocity.setX(getVelocityX()+ getAX()); ;
+            setVelocityX(getVelocityX()+ getAX()); ;
 
             setACounterX(0);
         }
@@ -269,7 +359,7 @@ public abstract class Asset implements ForceTaker {
 
 
         if(screenY + 300 > 0 && screenY - 300 < getGp().screen.getHeight()){
-            g2.drawImage(image, screenX, screenY, mainRect.width, mainRect.height, null);
+            g2.drawImage(image, screenX, screenY, getWidth(), getHeight(), null);
         }
 
     }

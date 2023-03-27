@@ -18,7 +18,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
        setGp(gp);
        setAY(0);
 
-       setVelocityYToBeGiven(-4);
+       setVelocityYToBeGiven(-8);
 
 
        int height=23;
@@ -48,13 +48,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
 
     public void moveAlongX(){
         setVelocityX(moveVelocityX);
-        //setVelocityX(moveVelocityX);
     }
-
-    /*
-    public void moveAlongX(){
-        //setVelocityX(moveVelocityX);
-    }*/
 
     public void giveLocation(CanBeLocated canBeLocated){
         canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight());
@@ -98,15 +92,15 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     public void update() {
         super.update();
 
-        if(mainRect.x  > boundary.getRight()){
+        if(getX()  > getRight()){
 
-            mainRect.setLocation(boundary.getRight(),mainRect.y);
+            setLocation(getRight(),getY());
 
             setVelocityX(-Math.abs(getVelocityX()));
 
-        }else if(mainRect.x < boundary.getLeft()){
+        }else if(getX() < -getLeft()){
 
-            mainRect.setLocation(boundary.getLeft(),mainRect.y);
+            setLocation(-getLeft(),getY());
 
             setVelocityX(Math.abs(getVelocityX()));
         }

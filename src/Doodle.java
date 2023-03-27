@@ -11,7 +11,7 @@ public class Doodle extends Asset implements VelocityTaker{
     private final BufferedImage leftImage1;
 
     private final int stopVelocity=0;
-    private final int moveVelocity=4;
+    private final int moveVelocity=5;
 
     {
         try {
@@ -32,7 +32,7 @@ public class Doodle extends Asset implements VelocityTaker{
 
         setGp(gp);
 
-        super.setVelocityY(-5);;
+        setVelocityY(-5);;
 
         setAY(1);
         setAWeaknessY(7);
@@ -140,13 +140,13 @@ public class Doodle extends Asset implements VelocityTaker{
     public void update() {
         super.update();
 
-        if(mainRect.x  > boundary.getRight()){
+        if(getX()  > getRight()){
 
-            mainRect.setLocation(boundary.getLeft(),mainRect.y);
+           setLocation(getLeft(),getY());
 
-        }else if(mainRect.x < boundary.getLeft()){
+        }else if(getX() <getLeft()){
 
-            mainRect.setLocation(boundary.getRight(),mainRect.y);
+            setLocation(getRight(),getY());
         }
     }
 
