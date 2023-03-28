@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Doodle extends Asset implements VelocityTaker{
+public class Doodle extends Asset implements VelocityTakerFromAsset {
 
     private final BufferedImage rightImage;
     private final BufferedImage rightImage1;
@@ -79,8 +79,24 @@ public class Doodle extends Asset implements VelocityTaker{
 
     }
 
+    @Override
+    public void overFlowScreen() {
+        if(getX()  > getRight()){
+
+            setLocation(getLeft(),getY());
+
+        }else if(getX() <getLeft()){
+
+            setLocation(getRight(),getY());
+        }
+    }
+
     public void activate(CanBeActivated canBeActivated) {
-        canBeActivated.beActivated();
+        if(headingDown()){
+            System.out.println("ds");
+            canBeActivated.beActivated();
+        }
+        System.out.println(getVelocityY());
     }
 
     /*
@@ -94,15 +110,14 @@ public class Doodle extends Asset implements VelocityTaker{
         cloneVelocityToThisVelocity(givenVelocity);
 
     }
-
     @Override
     public void takeVelocityX(Velocity givenVelocityX) {
-
+        setVelocityX(givenVelocityX.getX());
     }
 
     @Override
     public void takeVelocityY(Velocity givenVelocityY) {
-
+        setVelocityY(givenVelocityY.getY());
     }
 
     public void executeWhenRightPressed(){
@@ -168,16 +183,10 @@ public class Doodle extends Asset implements VelocityTaker{
 
     @Override
     public void update() {
+
         super.update();
 
-        if(getX()  > getRight()){
 
-           setLocation(getLeft(),getY());
-
-        }else if(getX() <getLeft()){
-
-            setLocation(getRight(),getY());
-        }
     }
 
 

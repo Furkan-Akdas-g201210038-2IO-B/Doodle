@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Screen {
 
@@ -7,11 +9,14 @@ public class Screen {
     private Rectangle camera = new Rectangle();
 
     private Doodle doodle;
+
+    private ArrayList<Asset> assets;
     public Boundary boundary;
 
     public Screen(GamePanel gp) {
         this.gp = gp;
         doodle =gp.assetManager.getDoodle();
+        assets = gp.assetManager.getAssets();
         camera.setSize(gp.gpWidth,gp.gpHeight);
         camera.setLocation(0,gp.worldCreator.getWorldHeight() - getHeight());
 

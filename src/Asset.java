@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public abstract class Asset implements ForceTaker {
+public abstract class Asset {
     GamePanel gp=null;
     Rectangle mainRect=new Rectangle();
     BufferedImage image=null;
@@ -58,6 +58,9 @@ public abstract class Asset implements ForceTaker {
         this.mainRect = mainRect;
     }
 
+
+
+
     public void setLocation(int x,int y){
         this.mainRect.setLocation(x,y);
         setLocationXSettled(true);
@@ -91,27 +94,21 @@ public abstract class Asset implements ForceTaker {
 
     public void setLocationForUpdate(int x,int y){
         this.mainRect.setLocation(x,y);
-        setLocationXSettled(true);
-        setLocationYSettled(true);
     }
 
     public void setLocationXForUpdate(int x){
         this.mainRect.setLocation(x,getY());
-        setLocationXSettled(true);
     }
 
     public void setLocationYForUpdate(int y){
         this.mainRect.setLocation(getX(),y);
-        setLocationYSettled(true);
     }
 
     public void setVelocityXForUpdate(int velocityX) {
         velocity.setX(velocityX);
-        setVelocityXSettled(true);
     }
     public void setVelocityYForUpdate(int velocityY) {
         velocity.setY(velocityY);
-        setVelocityYSettled(true);
     }
 
 
@@ -283,7 +280,6 @@ public abstract class Asset implements ForceTaker {
     public void cloneVelocityToThisVelocity(Velocity velocity){
 
 
-
         setVelocityX(velocity.getX());
         setVelocityY(velocity.getY());
 
@@ -298,12 +294,10 @@ public abstract class Asset implements ForceTaker {
         setACounterY(force.getACounterY());
     }
 
-    @Override
-    public void takeForce(Force force) {
-        cloneForceToThisForce(force);
-    }
 
     public abstract void affect();
+
+    public abstract void overFlowScreen();
 
     public  void update(){
 

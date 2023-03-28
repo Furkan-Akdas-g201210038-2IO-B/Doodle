@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS =60;
     Thread gameThread;
     Observer observer ;
-    DoodleExecutor doodleExecutor;
+    KeyExecutor keyExecutor;
     KeyHandler keyHandler = new KeyHandler();
     WorldCreator worldCreator;
 
@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer = new Observer(this);
 
-        doodleExecutor = new DoodleExecutor(this);
+        keyExecutor = new KeyExecutor(this);
 
         screen = new Screen(this);
 
@@ -104,12 +104,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer.observe();
 
+        keyExecutor.execute();
 
+        assetManager.affect();
 
-        doodleExecutor.execute();
+        assetManager.overFlowScreen();
+
+        assetManager.update();
 
         screen.update();
-        assetManager.update();
 
     }
 

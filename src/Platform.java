@@ -50,21 +50,22 @@ public class Platform extends VelocityGiver implements CanBeActivated {
         setVelocityX(moveVelocityX);
     }
 
-    public void giveLocation(CanBeLocated canBeLocated){
-        canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight());
+    public void giveLocation(CanBeLocatedOnAsset canBeLocatedOnAsset){
+        canBeLocatedOnAsset.beLocated(getX(),getY(),getWidth(),getHeight());
 
     }
-    void giveVelocity(VelocityTaker velocityTaker) {
+    void giveVelocity(VelocityTakerFromAsset velocityTakerFromAsset) {
 
         Velocity velocityToBeGiven = new Velocity(this.velocityToBeGiven);
 
+        /*
         if(velocityTaker instanceof  Asset){
             velocityToBeGiven.setX(((Asset) velocityTaker).getVelocityX());
-        }
+        }*/
 
-        if(velocityTaker instanceof Doodle){
-            if(((Doodle) velocityTaker).headingDown())
-                 velocityTaker.takeVelocity(velocityToBeGiven);
+        if(velocityTakerFromAsset instanceof Doodle){
+            if(((Doodle) velocityTakerFromAsset).headingDown())
+                 velocityTakerFromAsset.takeVelocityY(velocityToBeGiven);
         }
     }
 
@@ -73,9 +74,9 @@ public class Platform extends VelocityGiver implements CanBeActivated {
 
         for (Asset collidedAsset : collidedAssets){
 
-            if(collidedAsset instanceof VelocityTaker){
+            if(collidedAsset instanceof VelocityTakerFromAsset){
 
-                giveVelocity((VelocityTaker) collidedAsset);
+                giveVelocity((VelocityTakerFromAsset) collidedAsset);
 
             }
 
@@ -83,8 +84,8 @@ public class Platform extends VelocityGiver implements CanBeActivated {
 
         for (Asset connectedAsset : connectedAssets){
 
-            if(connectedAsset instanceof CanBeLocated){
-                giveLocation((CanBeLocated) connectedAsset);
+            if(connectedAsset instanceof CanBeLocatedOnAsset){
+                giveLocation((CanBeLocatedOnAsset) connectedAsset);
             }
 
         }
@@ -93,9 +94,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     }
 
     @Override
-    public void update() {
-        super.update();
-
+    public void overFlowScreen() {
         if(getX()  > getRight()){
 
             setLocation(getRight(),getY());
@@ -111,7 +110,13 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     }
 
     @Override
+    public void update() {
+        super.update();
+    }
+
+    @Override
     public void beActivated() {
+      /*dd
         if(solidness<0)
             return;
 
@@ -122,5 +127,7 @@ public class Platform extends VelocityGiver implements CanBeActivated {
            setAWeaknessY(10);
            setACounterY(0);
        }
+
+       */
     }
 }

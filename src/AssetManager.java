@@ -75,6 +75,10 @@ public class AssetManager {
         return elements;
     }
 
+    public ArrayList<Asset> getAssets() {
+        return assets;
+    }
+
     public void update(){
 
         for (Asset asset : assets)
@@ -86,6 +90,18 @@ public class AssetManager {
 
         for (Asset asset : assets)
             asset.draw(g2);
+    }
+
+    public void affect(){
+
+        for (Asset asset : assets)
+            asset.affect();
+    }
+
+    public void overFlowScreen(){
+
+        for (Asset asset : assets)
+            asset.overFlowScreen();
     }
 
 }

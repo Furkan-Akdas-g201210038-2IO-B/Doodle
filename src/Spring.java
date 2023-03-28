@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated {
+public class Spring extends VelocityGiver implements CanBeActivated, CanBeLocatedOnAsset {
 
     private final BufferedImage comp;
     private final BufferedImage unComp;
@@ -24,19 +24,19 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
     Spring (){}
 
 
-    void giveVelocity(VelocityTaker velocityTaker) {
+    void giveVelocity(VelocityTakerFromAsset velocityTakerFromAsset) {
 
         if(canGiveVelocity){
 
             Velocity velocityToBeGiven = new Velocity(this.velocityToBeGiven);
 
-            if(velocityTaker instanceof  Asset){
-                velocityToBeGiven.setX(((Asset) velocityTaker).getVelocityX());
+            if(velocityTakerFromAsset instanceof  Asset){
+                velocityToBeGiven.setX(((Asset) velocityTakerFromAsset).getVelocityX());
             }
 
-            if(velocityTaker instanceof Doodle){
-                if(((Doodle) velocityTaker).headingDown()){
-                    velocityTaker.takeVelocity(velocityToBeGiven);
+            if(velocityTakerFromAsset instanceof Doodle){
+                if(((Doodle) velocityTakerFromAsset).headingDown()){
+                    velocityTakerFromAsset.takeVelocity(velocityToBeGiven);
                     canGiveVelocity=false;
                 }
 
@@ -49,9 +49,9 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
 
         for (Asset collidedAsset : collidedAssets){
 
-            if(collidedAsset instanceof VelocityTaker){
+            if(collidedAsset instanceof VelocityTakerFromAsset){
 
-                giveVelocity((VelocityTaker) collidedAsset);
+                giveVelocity((VelocityTakerFromAsset) collidedAsset);
 
             }
 
@@ -62,14 +62,24 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
     }
 
     @Override
-    public void beActivated() {
+    public void overFlowScreen() {
 
+    }
+
+    @Override
+    public void beActivated() {
+        /*
         for (Asset collidedAsset : collidedAssets){
             if(collidedAsset instanceof Doodle){
-                if(((Doodle) collidedAsset).headingDown())
+                if(((Doodle) collidedAsset).headingDown()){
                     setImage(unComp);
+
+                }
+
             }
-        }
+        }*/
+
+        setImage(unComp);
     }
 
 
@@ -81,15 +91,25 @@ public class Spring extends VelocityGiver implements CanBeActivated,CanBeLocated
 
 
     @Override
-    public void beLocated(int x, int y,int width,int height) {
+    public void beLocated(int x, int y, int width, int height) {
        setLocation(x + width/2,y - getHeight());
+    }
+
+    @Override
+    public void beLocatedX(int x, int y, int width, int height) {
+       // setLocation(x + width/2,y - getHeight());
+    }
+
+    @Override
+    public void beLocatedY(int x, int y, int width, int height) {
+        //setLocation(x + width/2,y - getHeight());
     }
 
     Spring(GamePanel gp){
 
         setGp(gp);
 
-        setVelocityYToBeGiven(-9);
+        setVelocityYToBeGiven(-10);
 
         int height=30;
         int width=30;
