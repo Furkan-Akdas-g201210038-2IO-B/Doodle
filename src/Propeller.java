@@ -139,7 +139,7 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
     public void beLocated(int x, int y, int width, int height) {
         setLocation(x,y+60);
     }
-
+//a
     @Override
     public void beLocatedX(int x, int y, int width, int height) {
 
