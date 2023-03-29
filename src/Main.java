@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,23 +23,19 @@ public class Main {
     }
 }
 
-interface A  {
+ abstract class Varlik{
 
-
-
-}
-
-interface B{
-
+    abstract int x();
 
 }
 
-class C extends D{
+class A extends Varlik{
 
-}
-
-class D{
-
+    int a=2;
+    @Override
+    int x() {
+        return 0;
+    }
 }
 
 

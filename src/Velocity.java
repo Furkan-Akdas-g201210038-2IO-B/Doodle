@@ -12,6 +12,7 @@ public class Velocity {
     public void cloneParToThis(Velocity velocity){
         this.x = velocity.x;
         this.y =velocity.y;
+
     }
 
     public int getX() {

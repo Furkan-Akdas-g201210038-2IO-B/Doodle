@@ -72,4 +72,16 @@ public class Force {
     public void setACounterY(int aCounterY) {
         this.aCounterY = aCounterY;
     }
+
+    @Override
+    public String toString() {
+        return "Force{" +
+                "aX=" + aX +
+                ", aY=" + aY +
+                ", aWeaknessX=" + aWeaknessX +
+                ", aWeaknessY=" + aWeaknessY +
+                ", aCounterX=" + aCounterX +
+                ", aCounterY=" + aCounterY +
+                '}';
+    }
 }

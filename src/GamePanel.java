@@ -106,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         keyExecutor.execute();
 
-        assetManager.affect();
+        assetManager.startInteraction();
 
         assetManager.overFlowScreen();
 

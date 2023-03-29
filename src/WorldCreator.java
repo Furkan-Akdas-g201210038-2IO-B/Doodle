@@ -11,7 +11,7 @@ public class WorldCreator {
     private final int stepMarginY=125;
     private final int worldHeight =1000;
 
-    private final int differentPlatformNum=2;
+    private final int differentPlatformNum=1;
 
     private final int springFrequencyWeakness=2;
 
@@ -51,6 +51,8 @@ public class WorldCreator {
             if(randomSpringNum % springFrequencyWeakness==0){
                 platform.addConnectedAsset(gp.assetManager.createSpring());
             }
+
+            //gp.assetManager.createSpring().addConnectedAsset(platform);
 
             int randomX = random.nextInt(gp.gpWidth - platform.getWidth());
 

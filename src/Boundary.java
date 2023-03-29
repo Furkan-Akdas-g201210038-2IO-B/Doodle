@@ -13,6 +13,13 @@ public class Boundary {
         this.down = down;
     }
 
+    public void cloneParToThis(Boundary boundary){
+        this.left = boundary.left;
+        this.right = boundary.right;
+        this.up = boundary.up;
+        this.down = boundary.down;
+    }
+
     public Boundary(){}
 
     public int getLeft() {

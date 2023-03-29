@@ -7,6 +7,8 @@ public class AssetManager {
     Doodle doodle;
     ArrayList<Asset> steps = new ArrayList<>();
 
+
+
     ArrayList<Asset> elements = new ArrayList<>();
     AssetManager(GamePanel gp){
         this.gp=gp;
@@ -17,6 +19,7 @@ public class AssetManager {
 
         assets.add(doodle);
 
+
         return doodle;
     }
 
@@ -26,6 +29,7 @@ public class AssetManager {
         steps.add(newPlatform);
         assets.add(newPlatform);
         elements.add(newPlatform);
+
 
         return newPlatform;
     }
@@ -38,6 +42,7 @@ public class AssetManager {
         steps.add(newPlatform);
         assets.add(newPlatform);
         elements.add(newPlatform);
+
 
         return newPlatform;
     }
@@ -92,10 +97,10 @@ public class AssetManager {
             asset.draw(g2);
     }
 
-    public void affect(){
+    public void startInteraction(){
 
-        for (Asset asset : assets)
-            asset.affect();
+        for (Asset canInteract : assets)
+            canInteract.startInteraction();
     }
 
     public void overFlowScreen(){

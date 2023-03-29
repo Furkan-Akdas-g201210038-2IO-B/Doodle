@@ -3,15 +3,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Doodle extends Asset implements VelocityTakerFromAsset {
+public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate {
 
     private final BufferedImage rightImage;
     private final BufferedImage rightImage1;
     private final BufferedImage leftImage;
     private final BufferedImage leftImage1;
 
-    private final int stopVelocity=0;
-    private final int moveVelocity=5;
+    private  int stopVelocity=0;
+    private  int moveVelocity=5;
+
 
     {
         try {
@@ -27,6 +28,8 @@ public class Doodle extends Asset implements VelocityTakerFromAsset {
     }
 
    Doodle(){}
+
+
 
     Doodle(GamePanel gp){
 
@@ -55,6 +58,22 @@ public class Doodle extends Asset implements VelocityTakerFromAsset {
         //head -> x:16 y:15 width:29 height:25
         //scale -> x:0.25 y:0.25 width:0.46 height:0.41
 
+        thisClonedAsset=new Doodle();
+
+    }
+
+
+    @Override
+    public void cloneParToThis(Asset asset) {
+        Doodle doodle = (Doodle)asset;
+        super.cloneParToThis(doodle);
+        this.moveVelocity=doodle.moveVelocity;
+        this.stopVelocity=doodle.stopVelocity;
+    }
+
+    public void clearCollidedAssets(){collidedAssets.clear();}
+    public void addCollidedAsset(Asset collidedAsset){
+        collidedAssets.add(collidedAsset);
     }
 
     public boolean headingDown(){
@@ -66,59 +85,21 @@ public class Doodle extends Asset implements VelocityTakerFromAsset {
     }
 
     @Override
-    public void affect() {
-
-        for(Asset collidedAsset : collidedAssets){
-
-            if(collidedAsset instanceof CanBeActivated){
-            activate((CanBeActivated) collidedAsset);
-            }
-        }
-
-        clearCollidedAssets();
-
+    public Doodle getCloned(){
+        thisClonedAsset.cloneParToThis(this);
+        return (Doodle) thisClonedAsset;
     }
 
-    @Override
-    public void overFlowScreen() {
-        if(getX()  > getRight()){
 
-            setLocation(getLeft(),getY());
-
-        }else if(getX() <getLeft()){
-
-            setLocation(getRight(),getY());
-        }
+    public int getMoveVelocity() {
+        return moveVelocity;
     }
 
-    public void activate(CanBeActivated canBeActivated) {
-        if(headingDown()){
-            System.out.println("ds");
-            canBeActivated.beActivated();
-        }
-        System.out.println(getVelocityY());
+    public void setMoveVelocity(int moveVelocity) {
+        this.moveVelocity = moveVelocity;
     }
 
-    /*
-    @Override
-    public void takeVelocity(Velocity givenVelocity) {
-        cloneVelocityToThisVelocity(givenVelocity);
-    }*/
-    @Override
-    public void takeVelocity(Velocity givenVelocity) {
 
-        cloneVelocityToThisVelocity(givenVelocity);
-
-    }
-    @Override
-    public void takeVelocityX(Velocity givenVelocityX) {
-        setVelocityX(givenVelocityX.getX());
-    }
-
-    @Override
-    public void takeVelocityY(Velocity givenVelocityY) {
-        setVelocityY(givenVelocityY.getY());
-    }
 
     public void executeWhenRightPressed(){
 
@@ -189,6 +170,117 @@ public class Doodle extends Asset implements VelocityTakerFromAsset {
 
     }
 
+
+    @Override
+    public void startInteraction() {
+
+        for(Asset collidedAsset : collidedAssets){
+
+            thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);
+
+            Asset otherAsset = collidedAsset;
+            Asset otherClonedAsset = otherAsset.getCloned();
+
+
+
+
+            affect(otherAsset,otherClonedAsset);
+            beAffected(otherAsset,otherClonedAsset);
+
+
+
+        }
+
+        clearCollidedAssets();
+
+        for (Asset connectedAsset : connectedAssets){
+
+            thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);
+
+            Asset otherAsset = connectedAsset;
+            Asset otherClonedAsset = otherAsset.getCloned();
+
+            affect(otherAsset,otherClonedAsset);
+            beAffected(otherAsset,otherClonedAsset);
+
+        }
+    }
+
+    @Override
+    public void affect(Asset willBeAffected, Asset cloned) {
+
+        if(willBeAffected instanceof CanBeActivated){
+            activate((CanBeActivated) willBeAffected, (CanBeActivated) cloned);
+        }
+
+    }
+
+    @Override
+    public void beAffected(Asset affectedBy, Asset cloned) {
+        if(affectedBy instanceof VelocityGiver){
+            ((VelocityGiver) affectedBy).giveVelocity((VelocityTaker) thisAsset, (VelocityTaker) thisClonedAsset);
+        }
+    }
+
+    @Override
+    public void activate(CanBeActivated canBeActivated, CanBeActivated cloned) {
+
+        if(canBeActivated instanceof Spring ||canBeActivated instanceof Propeller){
+            if(((Doodle)thisClonedAsset).headingDown())
+                canBeActivated.beActivated((CanActivate) thisAsset, (CanActivate) thisClonedAsset);
+        }else {
+            canBeActivated.beActivated((CanActivate) thisAsset, (CanActivate) thisClonedAsset);
+        }
+
+    }
+
+    @Override
+    public void locate(CanBeLocated canBeLocated, CanBeLocated cloned) {
+        canBeLocated.beLocated(thisClonedAsset.getX(),thisClonedAsset.getY(),thisClonedAsset.getWidth(),thisClonedAsset.getHeight());
+    }
+
+
+    @Override
+    public void takeVelocity(Velocity givenVelocity) {
+
+        cloneVelocityToThisVelocity(givenVelocity);
+    }
+
+    @Override
+    public void takeVelocityX(Velocity givenVelocityX) {
+        setVelocityX(givenVelocityX.getX());
+    }
+
+    @Override
+    public void takeVelocityY(Velocity givenVelocityY) {
+
+        setVelocityY(givenVelocityY.getY());
+    }
+
+
+
+    @Override
+    public void overFlowScreen() {
+        if(getX()  > getRight()){
+
+            setLocation(getLeft(),getY());
+
+        }else if(getX() <getLeft()){
+
+            setLocation(getRight(),getY());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "Doodle{" +
+                ", stopVelocity=" + stopVelocity +
+                ", moveVelocity=" + moveVelocity +
+                '}';
+    }
 
 
 }

@@ -2,15 +2,16 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
-public class Platform extends VelocityGiver implements CanBeActivated {
+public class Platform extends VelocityGiver implements CanBeActivated,CanLocate{
 
     Platform(Platform platform){
         super(platform);
     }
     Platform(){}
 
-    private final int stopVelocity=0;
-    private final int moveVelocityX=3;
+
+    private  int stopVelocity=0;
+    private  int moveVelocityX=3;
 
     private int solidness=-1;
     Platform(GamePanel gp){
@@ -36,6 +37,26 @@ public class Platform extends VelocityGiver implements CanBeActivated {
 
         boundary = new Boundary(0,gp.gpWidth-getWidth(),-1,-1);
 
+        thisClonedAsset = new Platform();
+
+    }
+    @Override
+    public Platform getCloned(){
+
+        thisClonedAsset.cloneParToThis(this);
+
+        return (Platform) thisClonedAsset;
+    }
+
+
+    @Override
+    public void cloneParToThis(Asset asset) {
+        Platform platform = (Platform)asset;
+
+        super.cloneParToThis(platform);
+        this.solidness= platform.solidness;
+        this.stopVelocity= platform.stopVelocity;
+        this.moveVelocityX= platform.moveVelocityX;
     }
 
     public void setSolidness(int solidness) {
@@ -50,48 +71,108 @@ public class Platform extends VelocityGiver implements CanBeActivated {
         setVelocityX(moveVelocityX);
     }
 
-    public void giveLocation(CanBeLocatedOnAsset canBeLocatedOnAsset){
-        canBeLocatedOnAsset.beLocated(getX(),getY(),getWidth(),getHeight());
-
+    public int getMoveVelocityX() {
+        return moveVelocityX;
     }
-    void giveVelocity(VelocityTakerFromAsset velocityTakerFromAsset) {
 
-        Velocity velocityToBeGiven = new Velocity(this.velocityToBeGiven);
-
-        /*
-        if(velocityTaker instanceof  Asset){
-            velocityToBeGiven.setX(((Asset) velocityTaker).getVelocityX());
-        }*/
-
-        if(velocityTakerFromAsset instanceof Doodle){
-            if(((Doodle) velocityTakerFromAsset).headingDown())
-                 velocityTakerFromAsset.takeVelocityY(velocityToBeGiven);
-        }
+    public void setMoveVelocityX(int moveVelocityX) {
+        this.moveVelocityX = moveVelocityX;
     }
 
     @Override
-    public void affect() {
+    public void update() {
+        super.update();
+    }
+
+
+    @Override
+    public void startInteraction() {
 
         for (Asset collidedAsset : collidedAssets){
 
-            if(collidedAsset instanceof VelocityTakerFromAsset){
+            thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);
 
-                giveVelocity((VelocityTakerFromAsset) collidedAsset);
 
-            }
+            Asset otherAsset = collidedAsset;
+            Asset otherClonedAsset = otherAsset.getCloned();
 
-        }
-
-        for (Asset connectedAsset : connectedAssets){
-
-            if(connectedAsset instanceof CanBeLocatedOnAsset){
-                giveLocation((CanBeLocatedOnAsset) connectedAsset);
-            }
+            affect(otherAsset,otherClonedAsset);
+            beAffected(otherAsset,otherClonedAsset);
 
         }
 
         clearCollidedAssets();
+
+        for (Asset connectedAsset : connectedAssets){
+
+            thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);
+
+            Asset otherAsset = connectedAsset;
+            Asset otherClonedAsset = otherAsset.getCloned();
+
+            affect(otherAsset,otherClonedAsset);
+            beAffected(otherAsset,otherClonedAsset);
+
+
+        }
+
+
     }
+
+    @Override
+    public void affect(Asset willBeAffected, Asset cloned) {
+
+        if(willBeAffected instanceof VelocityTaker){
+
+            giveVelocity((VelocityTaker) willBeAffected, (VelocityTaker) cloned);
+
+        }
+
+        if(willBeAffected instanceof CanBeLocated){
+            locate((CanBeLocated) willBeAffected, (CanBeLocated) cloned);
+        }
+
+    }
+
+    @Override
+    public void beAffected(Asset affectedBy, Asset cloned) {
+
+        if(affectedBy instanceof CanActivate){
+
+            ((CanActivate) affectedBy).activate((CanBeActivated) thisAsset, (CanBeActivated) thisClonedAsset);
+        }
+    }
+
+
+
+    @Override
+    public void giveVelocity(VelocityTaker velocityTaker ,VelocityTaker cloned) {
+
+       // System.out.println(((Platform)thisClonedAsset).getVelocityYToBeGiven());
+
+        Velocity velocityToBeGiven = new Velocity(((Platform)(thisClonedAsset)).velocityToBeGiven);
+
+
+
+        if(velocityTaker instanceof Doodle){
+            if(((Doodle) cloned).headingDown())
+                velocityTaker.takeVelocityY(velocityToBeGiven);
+        }
+    }
+
+    @Override
+    public void locate(CanBeLocated canBeLocated, CanBeLocated cloned) {
+        //Şart yok
+        canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight());
+    }
+
+    @Override
+    public void beActivated(CanActivate canActivate, CanActivate cloned) {
+
+    }
+
 
     @Override
     public void overFlowScreen() {
@@ -110,24 +191,12 @@ public class Platform extends VelocityGiver implements CanBeActivated {
     }
 
     @Override
-    public void update() {
-        super.update();
-    }
-
-    @Override
-    public void beActivated() {
-      /*dd
-        if(solidness<0)
-            return;
-
-       setSolidness(getSolidness() - 1);
-
-       if(solidness==0){
-           setAY(1);
-           setAWeaknessY(10);
-           setACounterY(0);
-       }
-
-       */
+    public String toString() {
+        return super.toString()+
+                "Platform{" +
+                "stopVelocity=" + stopVelocity +
+                ", moveVelocityX=" + moveVelocityX +
+                ", solidness=" + solidness +
+                '}';
     }
 }

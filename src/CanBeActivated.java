@@ -1,5 +1,7 @@
-public interface CanBeActivated{
+public interface CanBeActivated {
 
-    void beActivated();
+
+        void beActivated(CanActivate canActivate, CanActivate cloned);
+
 
 }

@@ -2,10 +2,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public abstract class Asset {
+public abstract class Asset implements CanInteract {
     GamePanel gp=null;
     Rectangle mainRect=new Rectangle();
     BufferedImage image=null;
+
+    Asset thisAsset;
+    Asset thisClonedAsset;
 
     final Velocity velocity=new Velocity();
 
@@ -15,12 +18,15 @@ public abstract class Asset {
 
     ArrayList<Asset> collidedAssets = new ArrayList<>();
 
-    Boundary boundary;
+    Rectangle solidArea= new Rectangle();
+    Boundary boundary=new Boundary();
 
     private boolean isLocationXSettled=false;
     private boolean isLocationYSettled=false;
     private boolean isVelocityYSettled=false;
     private boolean isVelocityXSettled=false;
+
+    public Asset(){}
 
     Asset(Asset asset){
         //Buraya Dikkat!!!!!!
@@ -36,9 +42,25 @@ public abstract class Asset {
         //this.connectedAsset =asset.connectedAsset;
     }
 
+    public void cloneParToThis(Asset asset){
 
+        this.mainRect.setLocation(asset.getX(),asset.getY());
+        this.mainRect.setSize(asset.getWidth(),asset.getHeight());
+        this.velocity.cloneParToThis(asset.velocity);
+        this.force.cloneParToThis(asset.force);
+        this.boundary.cloneParToThis(asset.boundary);
+        this.isLocationYSettled=asset.isLocationYSettled;
+        this.isLocationXSettled=asset.isLocationXSettled;
+        this.isVelocityYSettled=asset.isVelocityYSettled;
+        this.isVelocityXSettled=asset.isVelocityXSettled;
+        this.solidArea.setLocation(asset.solidArea.x,asset.solidArea.y);
+        this.solidArea.setSize(asset.solidArea.width,asset.solidArea.height);
+    }
 
-    public Asset(){}
+    public Asset getCloned(){
+        thisClonedAsset.cloneParToThis(this);
+        return  thisClonedAsset;
+    }
 
 
 
@@ -232,7 +254,7 @@ public abstract class Asset {
         boundary.setDown(yDown);
     }
 
-    Rectangle solidArea;
+
 
     public void setSolidArea(Rectangle solidArea) {
         this.solidArea = solidArea;
@@ -293,9 +315,6 @@ public abstract class Asset {
         setACounterX(force.getACounterX());
         setACounterY(force.getACounterY());
     }
-
-
-    public abstract void affect();
 
     public abstract void overFlowScreen();
 
@@ -364,4 +383,21 @@ public abstract class Asset {
 
     }
 
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                ", mainRect=" + mainRect +
+                ", velocity=" + velocity +
+                ", force=" + force +
+               /* ", connectedAssets=" + connectedAssets+
+                ", collidedAssets=" + collidedAssets +*/
+                ", solidArea=" + solidArea +
+                ", boundary=" + boundary +
+                ", isLocationXSettled=" + isLocationXSettled +
+                ", isLocationYSettled=" + isLocationYSettled +
+                ", isVelocityYSettled=" + isVelocityYSettled +
+                ", isVelocityXSettled=" + isVelocityXSettled +
+                '}';
+    }
 }

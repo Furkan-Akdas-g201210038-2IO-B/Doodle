@@ -35,9 +35,8 @@ public class Observer {
 
             if(doodle.getSolidArea().intersects(asset.getSolidArea())){
 
-                doodle.addCollidedAsset(asset);
-                asset.addCollidedAsset(doodle);
-
+              // doodle.addCollidedAsset(asset);
+               asset.addCollidedAsset(doodle);
             }
 
             asset.getSolidArea().x = tempXPlatform;

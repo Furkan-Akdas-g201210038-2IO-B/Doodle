@@ -1,4 +1,4 @@
-public interface VelocityTakerFromAsset {
+public interface VelocityTaker {
 
         void takeVelocity(Velocity givenVelocity);
 

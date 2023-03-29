@@ -3,72 +3,64 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocated{
+public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLocated{
 
-    private final BufferedImage comp;
-    private final BufferedImage unComp;
-
-    private boolean canGiveVelocity=true;
-
-
+    private final BufferedImage propeller;
+    private final BufferedImage propeller1;
+    private final BufferedImage propeller2;
+    private final BufferedImage propeller3;
 
     {
         try {
-            comp = ImageIO.read(getClass().getResourceAsStream("/objects/spring/spring_comp.png"));
-            unComp = ImageIO.read(getClass().getResourceAsStream("/objects/spring/spring.png"));
+            propeller = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller.png"));
+            propeller1 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller1.png"));
+            propeller2 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller2.png"));
+            propeller3 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller3.png"));
 
-            image=comp;
+
+            image=propeller;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    Spring (){}
+    Propeller (){}
 
 
 
 
-    Spring(GamePanel gp){
+    Propeller(GamePanel gp){
 
         setGp(gp);
 
-        setVelocityYToBeGiven(-10);
+        setVelocityYToBeGiven(-5);
 
-        int height=30;
-        int width=30;
+        int height=32;
+        int width=32;
 
-        /*int height=22;
-        int width=30;*/
 
         mainRect = new Rectangle(0,0,width,height);
-        solidArea = new Rectangle(width*0,(int)(height*0.38),(int)(width*1),(int)(height*0.40));
+        solidArea = new Rectangle(width*0,(int)(height*0.37),(int)(width*1),(int)(height*0.62));
 
-        //size  -> width:21 height:44
-        //solid -> x:0 y:17 width:21 height:18
-        //scale -> x:0 y:0.38 width:1 height:0.40
+        //size  -> width:32 height:32
+        //solid -> x:0 y:12 width:32 height:20
+        //scale -> x:0 y:0.37 width:1 height:0.62
 
 
 
-        thisClonedAsset = new Spring();
+        thisClonedAsset = new Propeller();
     }
 
-    public Spring getCloned(){
+    public Propeller getCloned(){
         thisClonedAsset.cloneParToThis(this);
-        return (Spring) thisClonedAsset;
+        return (Propeller) thisClonedAsset;
     }
     @Override
     public void cloneParToThis(Asset asset) {
-        Spring spring = (Spring)asset;
-        super.cloneParToThis(spring);
-        this.canGiveVelocity=spring.canGiveVelocity;
+        Propeller propeller = (Propeller) asset;
+        super.cloneParToThis(propeller);
+
     }
-
-
-    @Override
-    public void update() {
-        super.update();
-    }
-
     @Override
     public void startInteraction() {
 
@@ -102,8 +94,6 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
     }
 
-
-
     @Override
     public void affect(Asset willBeAffected, Asset cloned) {
 
@@ -113,7 +103,9 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
         }
 
+
     }
+
 
     @Override
     public void beAffected(Asset affectedBy, Asset cloned) {
@@ -130,41 +122,12 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
     }
 
     @Override
-    public void giveVelocity(VelocityTaker velocityTaker,VelocityTaker cloned) {
+    public void giveVelocity(VelocityTaker velocityTaker, VelocityTaker cloned) {
 
-        Velocity velocityToBeGiven = new Velocity(((Spring)(thisClonedAsset)).velocityToBeGiven);
+        Velocity velocityToBeGiven = new Velocity(((Propeller)(thisClonedAsset)).velocityToBeGiven);
 
+        velocityTaker.takeVelocityY(velocityToBeGiven);
 
-        if(velocityTaker instanceof Doodle){
-            if(((Doodle) cloned).headingDown())
-                velocityTaker.takeVelocityY(velocityToBeGiven);
-        }
-
-    }
-
-
-
-    @Override
-    public void beActivated(CanActivate canActivate, CanActivate cloned) {
-
-       setImage(unComp);
-    }
-
-
-
-    @Override
-    public void beLocated(int x, int y, int width, int height) {
-        setLocation(x + width/2,y - getHeight());
-    }
-
-    @Override
-    public void beLocatedX(int x, int y, int width, int height) {
-        // setLocation(x + width/2,y - getHeight());
-    }
-
-    @Override
-    public void beLocatedY(int x, int y, int width, int height) {
-        //setLocation(x + width/2,y - getHeight());
     }
 
     @Override
@@ -172,12 +135,23 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
     }
 
+    @Override
+    public void beLocated(int x, int y, int width, int height) {
+        setLocation(x,y+60);
+    }
 
     @Override
-    public String toString() {
-        return super.toString()+
-                "Spring{" +
-                ", canGiveVelocity=" + canGiveVelocity +
-                '}';
+    public void beLocatedX(int x, int y, int width, int height) {
+
+    }
+
+    @Override
+    public void beLocatedY(int x, int y, int width, int height) {
+
+    }
+
+    @Override
+    public void beActivated(CanActivate canActivate, CanActivate cloned) {
+
     }
 }
