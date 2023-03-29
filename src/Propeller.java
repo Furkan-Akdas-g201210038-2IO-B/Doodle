@@ -10,6 +10,8 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
     private final BufferedImage propeller2;
     private final BufferedImage propeller3;
 
+    private boolean locatedLock1 = false;
+
     {
         try {
             propeller = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller.png"));
@@ -35,8 +37,8 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
 
         setVelocityYToBeGiven(-5);
 
-        int height=32;
-        int width=32;
+        int height=42;
+        int width=42;
 
 
         mainRect = new Rectangle(0,0,width,height);
@@ -59,6 +61,7 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
     public void cloneParToThis(Asset asset) {
         Propeller propeller = (Propeller) asset;
         super.cloneParToThis(propeller);
+        this.locatedLock1=propeller.locatedLock1;
 
     }
     @Override
@@ -66,8 +69,6 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
 
         for (Asset collidedAsset : collidedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
 
             Asset otherAsset = collidedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
@@ -81,8 +82,7 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
 
         for (Asset connectedAsset : connectedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
+
 
             Asset otherAsset = connectedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
@@ -112,11 +112,11 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
 
         if(affectedBy instanceof CanActivate){
 
-            ((CanActivate) affectedBy).activate((CanBeActivated) thisAsset, (CanBeActivated) thisClonedAsset);
+            ((CanActivate) affectedBy).activate((CanBeActivated) this, (CanBeActivated) thisClonedAsset);
         }
 
         if(affectedBy instanceof CanLocate){
-            ((CanLocate) affectedBy).locate((CanBeLocated) thisAsset, (CanBeLocated) thisClonedAsset);
+            ((CanLocate) affectedBy).locate((CanBeLocated) this, (CanBeLocated) thisClonedAsset);
         }
 
     }
@@ -126,7 +126,8 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
 
         Velocity velocityToBeGiven = new Velocity(((Propeller)(thisClonedAsset)).velocityToBeGiven);
 
-        velocityTaker.takeVelocityY(velocityToBeGiven);
+        velocityTaker.takeVelocityY(velocityToBeGiven, (VelocityGiver) this, (VelocityGiver) thisClonedAsset);
+
 
     }
 
@@ -136,22 +137,43 @@ public class Propeller extends VelocityGiver implements CanBeActivated,CanBeLoca
     }
 
     @Override
-    public void beLocated(int x, int y, int width, int height) {
-        setLocation(x,y+60);
-    }
-//ad
-    @Override
-    public void beLocatedX(int x, int y, int width, int height) {
+    public void beLocated(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
+
+
+
+        if((canLocate instanceof Platform)){
+            if(!locatedLock1)
+                setLocation(x + width/2,y - getHeight());
+        }else {
+            setLocation(x + width/2,y - getHeight());
+            locatedLock1=true;
+        }
+
 
     }
 
     @Override
-    public void beLocatedY(int x, int y, int width, int height) {
+    public void beLocatedX(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
+
+    }
+
+    @Override
+    public void beLocatedY(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
 
     }
 
     @Override
     public void beActivated(CanActivate canActivate, CanActivate cloned) {
 
+        newConnectedAsset = (Asset) canActivate;
+        deletedConnectedAsset =connectedAssets.get(0);
+
+    }
+
+
+    @Override
+    public void update() {
+        super.update();
+        locatedLock1=false;
     }
 }

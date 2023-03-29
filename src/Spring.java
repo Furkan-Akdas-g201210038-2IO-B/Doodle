@@ -10,7 +10,7 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
     private boolean canGiveVelocity=true;
 
-
+    private boolean locatedLock1;
 
     {
         try {
@@ -32,7 +32,7 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
         setGp(gp);
 
-        setVelocityYToBeGiven(-10);
+        setVelocityYToBeGiven(-5);
 
         int height=30;
         int width=30;
@@ -51,22 +51,30 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
         thisClonedAsset = new Spring();
     }
-
+    @Override
     public Spring getCloned(){
-        thisClonedAsset.cloneParToThis(this);
+        //thisClonedAsset.cloneParToThis(this);
         return (Spring) thisClonedAsset;
     }
+
+    @Override
+    public void cloneClonedAsset() {
+        thisClonedAsset.cloneParToThis(this);
+    }
+
     @Override
     public void cloneParToThis(Asset asset) {
         Spring spring = (Spring)asset;
         super.cloneParToThis(spring);
         this.canGiveVelocity=spring.canGiveVelocity;
+        this.locatedLock1 = spring.locatedLock1;
     }
 
 
     @Override
     public void update() {
         super.update();
+        locatedLock1=false;
     }
 
     @Override
@@ -74,29 +82,28 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
 
         for (Asset collidedAsset : collidedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
+            /*thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);*/
 
             Asset otherAsset = collidedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
 
             affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+            //beAffected(otherAsset,otherClonedAsset);
 
         }
 
-        clearCollidedAssets();
 
         for (Asset connectedAsset : connectedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
+            /*thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);*/
 
             Asset otherAsset = connectedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
 
             affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+            //beAffected(otherAsset,otherClonedAsset);
 
         }
 
@@ -118,52 +125,71 @@ public class Spring extends VelocityGiver implements CanBeActivated ,CanBeLocate
     @Override
     public void beAffected(Asset affectedBy, Asset cloned) {
 
-        if(affectedBy instanceof CanActivate){
+        /*if(affectedBy instanceof CanActivate){
 
             ((CanActivate) affectedBy).activate((CanBeActivated) thisAsset, (CanBeActivated) thisClonedAsset);
         }
 
         if(affectedBy instanceof CanLocate){
             ((CanLocate) affectedBy).locate((CanBeLocated) thisAsset, (CanBeLocated) thisClonedAsset);
-        }
+        }*/
 
     }
 
     @Override
     public void giveVelocity(VelocityTaker velocityTaker,VelocityTaker cloned) {
 
-        Velocity velocityToBeGiven = new Velocity(((Spring)(thisClonedAsset)).velocityToBeGiven);
+        if(canGiveVelocity){
 
 
-        if(velocityTaker instanceof Doodle){
-            if(((Doodle) cloned).headingDown())
-                velocityTaker.takeVelocityY(velocityToBeGiven);
+
+            Velocity velocityToBeGiven = new Velocity(((Spring)(thisClonedAsset)).velocityToBeGiven);
+
+            if(velocityTaker instanceof Doodle){
+                if(((Doodle) cloned).headingDown())
+                    velocityTaker.takeVelocityY(velocityToBeGiven, (VelocityGiver) this, (VelocityGiver) thisClonedAsset);
+            }
+
+
+
+
         }
 
-    }
 
+
+    }
 
 
     @Override
     public void beActivated(CanActivate canActivate, CanActivate cloned) {
 
        setImage(unComp);
+
+       canGiveVelocity=false;
     }
 
 
-
     @Override
-    public void beLocated(int x, int y, int width, int height) {
-        setLocation(x + width/2,y - getHeight());
+    public void beLocated(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
+
+        if(!(canLocate instanceof Platform)){
+            if(!locatedLock1)
+                setLocation(x + width/2,y - getHeight());
+        }else {
+            setLocation(x + width/2,y - getHeight());
+            locatedLock1=true;
+        }
+
+
     }
 
     @Override
-    public void beLocatedX(int x, int y, int width, int height) {
+    public void beLocatedX(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
         // setLocation(x + width/2,y - getHeight());
     }
 
     @Override
-    public void beLocatedY(int x, int y, int width, int height) {
+    public void beLocatedY(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
         //setLocation(x + width/2,y - getHeight());
     }
 

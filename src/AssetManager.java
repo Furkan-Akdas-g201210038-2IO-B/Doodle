@@ -7,9 +7,12 @@ public class AssetManager {
     Doodle doodle;
     ArrayList<Asset> steps = new ArrayList<>();
 
-
+    ArrayList<Platform> platforms = new ArrayList<>();
 
     ArrayList<Asset> elements = new ArrayList<>();
+    ArrayList<Asset> stuffs = new ArrayList<>();
+
+
     AssetManager(GamePanel gp){
         this.gp=gp;
     }
@@ -19,17 +22,17 @@ public class AssetManager {
 
         assets.add(doodle);
 
-
         return doodle;
     }
 
     public Platform createStillPlatform(){
         Platform newPlatform = new Platform(gp);
 
-        steps.add(newPlatform);
+        /*steps.add(newPlatform);
         assets.add(newPlatform);
-        elements.add(newPlatform);
+        elements.add(newPlatform);*/
 
+        assets.add(newPlatform);
 
         return newPlatform;
     }
@@ -39,10 +42,11 @@ public class AssetManager {
 
         newPlatform.moveAlongX();
 
-        steps.add(newPlatform);
+       /* steps.add(newPlatform);
         assets.add(newPlatform);
-        elements.add(newPlatform);
+        elements.add(newPlatform);*/
 
+        assets.add(newPlatform);
 
         return newPlatform;
     }
@@ -52,9 +56,11 @@ public class AssetManager {
 
         newPlatform.moveAlongX();
 
-        steps.add(newPlatform);
+        /*steps.add(newPlatform);
         assets.add(newPlatform);
-        elements.add(newPlatform);
+        elements.add(newPlatform);*/
+
+        assets.add(newPlatform);
 
         return newPlatform;
     }
@@ -62,21 +68,78 @@ public class AssetManager {
     public Spring createSpring(){
         Spring newSpring = new Spring(gp);
 
-        elements.add(newSpring);
+        /*elements.add(newSpring);
+        assets.add(newSpring);*/
+
         assets.add(newSpring);
 
         return newSpring;
     }
+    public Propeller createPropeller(){
+        Propeller propeller = new Propeller(gp);
 
+        /*elements.add(newSpring);
+        assets.add(newSpring);*/
+
+        assets.add(propeller);
+
+        return propeller;
+    }
+
+
+    //public Doodle getDoodle(){return  doodle;}
     public Doodle getDoodle(){
+
+        Doodle doodle=null;
+
+        for (Asset asset : assets){
+            if(asset instanceof  Doodle)
+                doodle = (Doodle) asset;
+        }
         return doodle;
     }
 
-    public ArrayList<Asset> getSteps() {
-        return steps;
+    public ArrayList<Platform> getPlatforms(){
+
+        for (Asset asset : assets){
+            if(asset instanceof  Platform)
+                 platforms.add((Platform) asset);
+        }
+        return platforms;
     }
 
+    //public ArrayList<Asset> getSteps() {return steps;}
+
+    public ArrayList<Asset> getSteps() {
+
+        for (Asset asset : assets){
+            if(asset instanceof  Platform)
+                steps.add(asset);
+        }
+
+        return steps;
+
+    }
+
+    public ArrayList<Asset> getStuffs() {
+
+        for (Asset asset : assets){
+            if(asset instanceof  Propeller || asset instanceof Spring)
+                stuffs.add(asset);
+        }
+
+        return stuffs;
+
+    }
+    //public ArrayList<Asset> getElements() {return elements;}
+
     public ArrayList<Asset> getElements() {
+
+        for (Asset asset : assets){
+            if(asset instanceof  Platform || asset instanceof  Spring || asset instanceof Propeller)
+                elements.add(asset);
+        }
+
         return elements;
     }
 
@@ -99,8 +162,15 @@ public class AssetManager {
 
     public void startInteraction(){
 
+        for (Asset asset : getAssets()){
+            asset.cloneClonedAsset();
+        }
+
+
         for (Asset canInteract : assets)
             canInteract.startInteraction();
+
+
     }
 
     public void overFlowScreen(){

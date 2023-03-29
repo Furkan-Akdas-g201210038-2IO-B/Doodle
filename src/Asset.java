@@ -6,8 +6,6 @@ public abstract class Asset implements CanInteract {
     GamePanel gp=null;
     Rectangle mainRect=new Rectangle();
     BufferedImage image=null;
-
-    Asset thisAsset;
     Asset thisClonedAsset;
 
     final Velocity velocity=new Velocity();
@@ -20,6 +18,9 @@ public abstract class Asset implements CanInteract {
 
     Rectangle solidArea= new Rectangle();
     Boundary boundary=new Boundary();
+
+    Asset newConnectedAsset;
+    Asset deletedConnectedAsset;
 
     private boolean isLocationXSettled=false;
     private boolean isLocationYSettled=false;
@@ -58,11 +59,13 @@ public abstract class Asset implements CanInteract {
     }
 
     public Asset getCloned(){
-        thisClonedAsset.cloneParToThis(this);
+       // thisClonedAsset.cloneParToThis(this);
         return  thisClonedAsset;
     }
 
-
+    public void cloneClonedAsset(){
+        thisClonedAsset.cloneParToThis(this);
+    }
 
     public GamePanel getGp() {
         return gp;
@@ -212,15 +215,33 @@ public abstract class Asset implements CanInteract {
         force.setACounterY(aCounterY);
     }
 
+    public Asset getNewConnectedAsset() {
+        return newConnectedAsset;
+    }
+
+    public Asset getDeletedConnectedAsset() {
+        return deletedConnectedAsset;
+    }
+
+    public void setNewConnectedAsset(Asset newConnectedAsset) {
+        this.newConnectedAsset = newConnectedAsset;
+    }
+
+    public void setDeletedConnectedAsset(Asset deletedConnectedAsset) {
+        this.deletedConnectedAsset = deletedConnectedAsset;
+    }
+
     public void clearConnectedAssets(){connectedAssets.clear();}
     public void addConnectedAsset(Asset connectedAsset){
         connectedAssets.add(connectedAsset);
     }
+    public void removeConnectedAsset(Asset connectedAsset){connectedAssets.remove(connectedAsset);}
 
     public void clearCollidedAssets(){collidedAssets.clear();}
     public void addCollidedAsset(Asset collidedAsset){
         collidedAssets.add(collidedAsset);
     }
+    public void removeCollidedAsset(Asset collidedAsset){collidedAssets.remove(collidedAsset);}
 
     public int getLeft() {
         return boundary.getLeft();

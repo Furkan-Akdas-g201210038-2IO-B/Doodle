@@ -49,7 +49,12 @@ public class WorldCreator {
             }
 
             if(randomSpringNum % springFrequencyWeakness==0){
-                platform.addConnectedAsset(gp.assetManager.createSpring());
+               /* Spring spring = gp.assetManager.createSpring();
+                platform.addConnectedAsset(spring);
+                spring.addConnectedAsset(platform);*/
+                Propeller propeller = gp.assetManager.createPropeller();
+                platform.addConnectedAsset(propeller);
+                propeller.addConnectedAsset(platform);
             }
 
             //gp.assetManager.createSpring().addConnectedAsset(platform);

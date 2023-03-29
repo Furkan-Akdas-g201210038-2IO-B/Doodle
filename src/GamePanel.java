@@ -114,6 +114,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         screen.update();
 
+        observer.x();
+
     }
 
     @Override

@@ -43,11 +43,15 @@ public class Platform extends VelocityGiver implements CanBeActivated,CanLocate{
     @Override
     public Platform getCloned(){
 
-        thisClonedAsset.cloneParToThis(this);
+        //thisClonedAsset.cloneParToThis(this);
 
         return (Platform) thisClonedAsset;
     }
 
+    @Override
+    public void cloneClonedAsset() {
+        thisClonedAsset.cloneParToThis(this);
+    }
 
     @Override
     public void cloneParToThis(Asset asset) {
@@ -90,30 +94,30 @@ public class Platform extends VelocityGiver implements CanBeActivated,CanLocate{
 
         for (Asset collidedAsset : collidedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
+            /*thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);*/
 
 
             Asset otherAsset = collidedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
 
             affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+           // beAffected(otherAsset,otherClonedAsset);
 
         }
 
-        clearCollidedAssets();
+
 
         for (Asset connectedAsset : connectedAssets){
 
-            thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);
+            /*thisAsset = this;
+            thisClonedAsset.cloneParToThis(this);*/
 
             Asset otherAsset = connectedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
 
             affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+          //  beAffected(otherAsset,otherClonedAsset);
 
 
         }
@@ -139,10 +143,10 @@ public class Platform extends VelocityGiver implements CanBeActivated,CanLocate{
     @Override
     public void beAffected(Asset affectedBy, Asset cloned) {
 
-        if(affectedBy instanceof CanActivate){
+       /* if(affectedBy instanceof CanActivate){
 
             ((CanActivate) affectedBy).activate((CanBeActivated) thisAsset, (CanBeActivated) thisClonedAsset);
-        }
+        }*/
     }
 
 
@@ -155,17 +159,18 @@ public class Platform extends VelocityGiver implements CanBeActivated,CanLocate{
         Velocity velocityToBeGiven = new Velocity(((Platform)(thisClonedAsset)).velocityToBeGiven);
 
 
-
         if(velocityTaker instanceof Doodle){
             if(((Doodle) cloned).headingDown())
-                velocityTaker.takeVelocityY(velocityToBeGiven);
+                velocityTaker.takeVelocityY(velocityToBeGiven, (VelocityGiver) this, (VelocityGiver) thisClonedAsset);
         }
+
+
     }
 
     @Override
     public void locate(CanBeLocated canBeLocated, CanBeLocated cloned) {
         //Şart yok
-        canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight());
+        canBeLocated.beLocated(getX(),getY(),getWidth(),getHeight(), (CanLocate) this, (CanLocate) thisClonedAsset);
     }
 
     @Override

@@ -19,6 +19,11 @@ public class Observer {
 
     public void observe(){
 
+
+        for (Asset asset : assetManager.getAssets()){
+            asset.clearCollidedAssets();
+        }
+
         int tempXDoodle=doodle.getSolidArea().x;
         int tempYDoodle=doodle.getSolidArea().y;
 
@@ -35,7 +40,7 @@ public class Observer {
 
             if(doodle.getSolidArea().intersects(asset.getSolidArea())){
 
-              // doodle.addCollidedAsset(asset);
+               doodle.addCollidedAsset(asset);
                asset.addCollidedAsset(doodle);
             }
 
@@ -46,6 +51,36 @@ public class Observer {
 
          doodle.getSolidArea().x =tempXDoodle;
          doodle.getSolidArea().y =tempYDoodle;
+
+
+
+
+
+    }
+
+    public void x(){
+
+        for (Asset asset : assetManager.getAssets()){
+
+           Asset  newConnectedAsset =  asset.getNewConnectedAsset();
+
+           if(newConnectedAsset!=null){
+               asset.addConnectedAsset(newConnectedAsset);
+               newConnectedAsset.addConnectedAsset(asset);
+           }
+
+            Asset  deletedConnectedAsset =  asset.getDeletedConnectedAsset();
+
+            if(deletedConnectedAsset!=null){
+                asset.removeConnectedAsset(deletedConnectedAsset);
+                deletedConnectedAsset.removeConnectedAsset(asset);
+            }
+
+            asset.setNewConnectedAsset(null);
+            asset.setDeletedConnectedAsset(null);
+
+
+        }
 
     }
 
