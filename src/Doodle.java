@@ -2,8 +2,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate {
+public class Doodle extends Hitter implements CanLocate{
 
     private final BufferedImage rightImage;
     private final BufferedImage rightImage1;
@@ -74,10 +75,6 @@ public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate
         this.takeVelocityYLock1=doodle.takeVelocityYLock1;
     }
 
-    public void clearCollidedAssets(){collidedAssets.clear();}
-    public void addCollidedAsset(Asset collidedAsset){
-        collidedAssets.add(collidedAsset);
-    }
 
     public boolean headingDown(){
         return getVelocityY() > 0;
@@ -90,6 +87,7 @@ public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate
     @Override
     public Doodle getCloned(){
         //thisClonedAsset.cloneParToThis(this);
+
         return (Doodle) thisClonedAsset;
     }
 
@@ -107,9 +105,7 @@ public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate
     }
 
 
-
     public void executeWhenRightPressed(){
-
         //setVelocityX(moveVelocity);
         setAX(1);
         setAWeaknessX(4);
@@ -177,89 +173,67 @@ public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate
         takeVelocityYLock1=false;
     }
 
-
     @Override
     public void startInteraction() {
 
         for(Asset collidedAsset : collidedAssets){
 
-            /*thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);*/
-
             Asset otherAsset = collidedAsset;
             Asset otherClonedAsset = otherAsset.getCloned();
 
-
             affect(otherAsset,otherClonedAsset);
-            //beAffected(otherAsset,otherClonedAsset);
-
+            beAffected(otherAsset,otherClonedAsset);
         }
 
 
 
-        for (Asset connectedAsset : connectedAssets){
-
-           /* thisAsset = this;
-            thisClonedAsset.cloneParToThis(this);*/
-
-            Asset otherAsset = connectedAsset;
-            Asset otherClonedAsset = otherAsset.getCloned();
-
-            affect(otherAsset,otherClonedAsset);
-            //beAffected(otherAsset,otherClonedAsset);
-
-        }
     }
 
-    @Override
     public void affect(Asset willBeAffected, Asset cloned) {
 
-        if(willBeAffected instanceof CanBeActivated){
-            activate((CanBeActivated) willBeAffected, (CanBeActivated) cloned);
+        if(willBeAffected instanceof Element){
+            hit((Element) willBeAffected, (Element) cloned);
         }
 
     }
 
-    @Override
     public void beAffected(Asset affectedBy, Asset cloned) {
-       /* if(affectedBy instanceof VelocityGiver){
-            ((VelocityGiver) affectedBy).giveVelocity((VelocityTaker) thisAsset, (VelocityTaker) thisClonedAsset);
-        }*/
+        if(affectedBy instanceof Element){
+            ((Element) affectedBy).giveVelocity((Doodle) this, (Doodle) thisClonedAsset);
+        }
     }
 
     @Override
-    public void activate(CanBeActivated canBeActivated, CanBeActivated cloned) {
+    public void hit(Element element, Element cloned) {
 
-        if(canBeActivated instanceof Spring ||canBeActivated instanceof Propeller){
+        if(element instanceof Stuff){
 
             if(((Doodle)thisClonedAsset).headingDown())
-                canBeActivated.beActivated((CanActivate) this, (CanActivate) thisClonedAsset);
+                element.beHit((Hitter) this, (Hitter) thisClonedAsset);
 
         }
         else {
-            canBeActivated.beActivated((CanActivate) this, (CanActivate) thisClonedAsset);
+            element.beHit((Hitter) this, (Hitter) thisClonedAsset);
         }
 
     }
 
     @Override
-    public void locate(CanBeLocated canBeLocated, CanBeLocated cloned) {
-        canBeLocated.beLocated(thisClonedAsset.getX(),thisClonedAsset.getY(),thisClonedAsset.getWidth(),thisClonedAsset.getHeight()
+    public void locate(Stuff stuff, Stuff cloned) {
+        stuff.beLocated(thisClonedAsset.getX(),thisClonedAsset.getY(),thisClonedAsset.getWidth(),thisClonedAsset.getHeight()
                 ,(CanLocate) this, (CanLocate) thisClonedAsset);
     }
 
-    @Override
-    public void takeVelocity(Velocity givenVelocity, VelocityGiver velocityGiver, VelocityGiver cloned) {
+    public void takeVelocity(Velocity givenVelocity, Element velocityGiver, Element cloned) {
 
         cloneVelocityToThisVelocity(givenVelocity);
     }
 
-    @Override
-    public void takeVelocityX(Velocity givenVelocityX, VelocityGiver velocityGiver, VelocityGiver cloned) {
+    public void takeVelocityX(Velocity givenVelocityX, Element velocityGiver, Element cloned) {
         setVelocityX(givenVelocityX.getX());
     }
-    @Override
-    public void takeVelocityY(Velocity givenVelocityY, VelocityGiver velocityGiver, VelocityGiver cloned) {
+
+    public void takeVelocityY(Velocity givenVelocityY, Element velocityGiver, Element cloned) {
 
         if(velocityGiver instanceof Platform){
             if(!takeVelocityYLock1)
@@ -275,13 +249,16 @@ public class Doodle extends Asset implements VelocityTaker,CanActivate,CanLocate
 
     @Override
     public void overFlowScreen() {
-        if(getX()  > getRight()){
 
-            setLocation(getLeft(),getY());
+        Doodle  cld = (Doodle) thisClonedAsset;
 
-        }else if(getX() <getLeft()){
+        if(cld.getX()  > cld.getRight()){
 
-            setLocation(getRight(),getY());
+            setLocation(cld.getLeft(),cld.getY());
+
+        }else if(cld.getX() <cld.getLeft()){
+
+            setLocation(cld.getRight(),cld.getY());
         }
     }
 

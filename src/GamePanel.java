@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final BufferedImage bg;
 
     //SYSTEM
-    int FPS =60;
+    int FPS =50;
     Thread gameThread;
     Observer observer ;
     KeyExecutor keyExecutor;
@@ -103,6 +103,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void update(){
 
         observer.observe();
+
+
 
         keyExecutor.execute();
 

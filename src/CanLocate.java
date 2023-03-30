@@ -1,6 +1,6 @@
 public interface CanLocate {
 
 
-     void locate(CanBeLocated canBeLocated,CanBeLocated cloned);
+     void locate(Stuff stuff,Stuff cloned);
 
 }

@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public abstract class Asset implements CanInteract {
+public abstract class Asset  {
     GamePanel gp=null;
     Rectangle mainRect=new Rectangle();
     BufferedImage image=null;
@@ -12,15 +12,8 @@ public abstract class Asset implements CanInteract {
 
     final Force force = new Force();
 
-    ArrayList<Asset> connectedAssets = new ArrayList<>();
-
-    ArrayList<Asset> collidedAssets = new ArrayList<>();
-
     Rectangle solidArea= new Rectangle();
     Boundary boundary=new Boundary();
-
-    Asset newConnectedAsset;
-    Asset deletedConnectedAsset;
 
     private boolean isLocationXSettled=false;
     private boolean isLocationYSettled=false;
@@ -56,6 +49,7 @@ public abstract class Asset implements CanInteract {
         this.isVelocityXSettled=asset.isVelocityXSettled;
         this.solidArea.setLocation(asset.solidArea.x,asset.solidArea.y);
         this.solidArea.setSize(asset.solidArea.width,asset.solidArea.height);
+
     }
 
     public Asset getCloned(){
@@ -215,33 +209,6 @@ public abstract class Asset implements CanInteract {
         force.setACounterY(aCounterY);
     }
 
-    public Asset getNewConnectedAsset() {
-        return newConnectedAsset;
-    }
-
-    public Asset getDeletedConnectedAsset() {
-        return deletedConnectedAsset;
-    }
-
-    public void setNewConnectedAsset(Asset newConnectedAsset) {
-        this.newConnectedAsset = newConnectedAsset;
-    }
-
-    public void setDeletedConnectedAsset(Asset deletedConnectedAsset) {
-        this.deletedConnectedAsset = deletedConnectedAsset;
-    }
-
-    public void clearConnectedAssets(){connectedAssets.clear();}
-    public void addConnectedAsset(Asset connectedAsset){
-        connectedAssets.add(connectedAsset);
-    }
-    public void removeConnectedAsset(Asset connectedAsset){connectedAssets.remove(connectedAsset);}
-
-    public void clearCollidedAssets(){collidedAssets.clear();}
-    public void addCollidedAsset(Asset collidedAsset){
-        collidedAssets.add(collidedAsset);
-    }
-    public void removeCollidedAsset(Asset collidedAsset){collidedAssets.remove(collidedAsset);}
 
     public int getLeft() {
         return boundary.getLeft();
@@ -338,6 +305,8 @@ public abstract class Asset implements CanInteract {
     }
 
     public abstract void overFlowScreen();
+
+    public abstract void startInteraction();
 
     public  void update(){
 

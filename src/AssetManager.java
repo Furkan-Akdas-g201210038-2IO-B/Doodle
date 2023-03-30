@@ -9,8 +9,8 @@ public class AssetManager {
 
     ArrayList<Platform> platforms = new ArrayList<>();
 
-    ArrayList<Asset> elements = new ArrayList<>();
-    ArrayList<Asset> stuffs = new ArrayList<>();
+    ArrayList<Element> elements = new ArrayList<>();
+    ArrayList<Stuff> stuffs = new ArrayList<>();
 
 
     AssetManager(GamePanel gp){
@@ -100,6 +100,7 @@ public class AssetManager {
     }
 
     public ArrayList<Platform> getPlatforms(){
+        platforms.clear();
 
         for (Asset asset : assets){
             if(asset instanceof  Platform)
@@ -111,7 +112,7 @@ public class AssetManager {
     //public ArrayList<Asset> getSteps() {return steps;}
 
     public ArrayList<Asset> getSteps() {
-
+        steps.clear();
         for (Asset asset : assets){
             if(asset instanceof  Platform)
                 steps.add(asset);
@@ -121,11 +122,11 @@ public class AssetManager {
 
     }
 
-    public ArrayList<Asset> getStuffs() {
-
+    public ArrayList<Stuff> getStuffs() {
+        stuffs.clear();
         for (Asset asset : assets){
-            if(asset instanceof  Propeller || asset instanceof Spring)
-                stuffs.add(asset);
+            if(asset instanceof  Stuff)
+                stuffs.add((Stuff) asset);
         }
 
         return stuffs;
@@ -133,11 +134,14 @@ public class AssetManager {
     }
     //public ArrayList<Asset> getElements() {return elements;}
 
-    public ArrayList<Asset> getElements() {
-
+    public ArrayList<Element> getElements() {
+        elements.clear();
         for (Asset asset : assets){
-            if(asset instanceof  Platform || asset instanceof  Spring || asset instanceof Propeller)
-                elements.add(asset);
+
+            if(asset instanceof Element){
+               elements.add((Element) asset);
+            }
+
         }
 
         return elements;
@@ -167,9 +171,9 @@ public class AssetManager {
         }
 
 
-        for (Asset canInteract : assets)
-            canInteract.startInteraction();
-
+        for (Asset asset : assets){
+            asset.startInteraction();
+        }
 
     }
 

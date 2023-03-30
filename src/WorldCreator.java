@@ -8,12 +8,12 @@ public class WorldCreator {
     private Random random = new Random();
 
     private int cursorY;
-    private final int stepMarginY=125;
-    private final int worldHeight =1000;
+    private final int stepMarginY=100;
+    private final int worldHeight =100;
 
     private final int differentPlatformNum=1;
 
-    private final int springFrequencyWeakness=2;
+    private final int springFrequencyWeakness=1;
 
     private final int stepNum = worldHeight/stepMarginY;
  //   private final int stepNum = 17;
@@ -49,12 +49,12 @@ public class WorldCreator {
             }
 
             if(randomSpringNum % springFrequencyWeakness==0){
-               /* Spring spring = gp.assetManager.createSpring();
-                platform.addConnectedAsset(spring);
-                spring.addConnectedAsset(platform);*/
+                /*Spring spring = gp.assetManager.createSpring();
+                platform.setCointainingStuff(spring);*/
+
                 Propeller propeller = gp.assetManager.createPropeller();
-                platform.addConnectedAsset(propeller);
-                propeller.addConnectedAsset(platform);
+                platform.setCointainingStuff(propeller);
+
             }
 
             //gp.assetManager.createSpring().addConnectedAsset(platform);
