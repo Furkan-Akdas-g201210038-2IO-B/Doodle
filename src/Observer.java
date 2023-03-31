@@ -16,7 +16,7 @@ public class Observer {
     public void observe(){
 
 
-        doodle.clearCollidedAssets();
+        doodle.clearCollidedElements();
 
         int tempXDoodle=doodle.getSolidArea().x;
         int tempYDoodle=doodle.getSolidArea().y;
@@ -24,22 +24,22 @@ public class Observer {
         doodle.getSolidArea().x =doodle.getSolidArea().x + doodle.getMainRect().x;
         doodle.getSolidArea().y =doodle.getSolidArea().y + doodle.getMainRect().y;
 
-        for (Asset asset : assetManager.getElements()){
+        for (Element element : assetManager.getElements()){
 
-            int tempXPlatform = asset.getSolidArea().x;
-            int tempYPlatform = asset.getSolidArea().y;
+            int tempXPlatform = element.getSolidArea().x;
+            int tempYPlatform = element.getSolidArea().y;
 
-            asset.getSolidArea().x = asset.getMainRect().x + asset.getSolidArea().x;
-            asset.getSolidArea().y = asset.getMainRect().y + asset.getSolidArea().y;
+            element.getSolidArea().x = element.getMainRect().x + element.getSolidArea().x;
+            element.getSolidArea().y = element.getMainRect().y + element.getSolidArea().y;
 
-            if(doodle.getSolidArea().intersects(asset.getSolidArea())){
+            if(doodle.getSolidArea().intersects(element.getSolidArea())){
 
-               doodle.addCollidedAsset(asset);
+               doodle.addCollidedElement(element);
                //asset.addCollidedAsset(doodle);
             }
 
-            asset.getSolidArea().x = tempXPlatform;
-            asset.getSolidArea().y = tempYPlatform;
+            element.getSolidArea().x = tempXPlatform;
+            element.getSolidArea().y = tempYPlatform;
 
         }
 

@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Doodle extends Hitter implements CanLocate{
 
@@ -176,45 +175,22 @@ public class Doodle extends Hitter implements CanLocate{
     @Override
     public void startInteraction() {
 
-        for(Asset collidedAsset : collidedAssets){
+        for(Element collidedElement : collidedElements){
 
-            Asset otherAsset = collidedAsset;
-            Asset otherClonedAsset = otherAsset.getCloned();
-
-            affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
-        }
+            Element otherElement = collidedElement;
+            Element otherClonedAsset = (Element) otherElement.getCloned();
 
 
+            hit(otherElement,otherClonedAsset);
 
-    }
-
-    public void affect(Asset willBeAffected, Asset cloned) {
-
-        if(willBeAffected instanceof Element){
-            hit((Element) willBeAffected, (Element) cloned);
-        }
-
-    }
-
-    public void beAffected(Asset affectedBy, Asset cloned) {
-        if(affectedBy instanceof Element){
-            ((Element) affectedBy).giveVelocity((Doodle) this, (Doodle) thisClonedAsset);
         }
     }
 
     @Override
     public void hit(Element element, Element cloned) {
 
-        if(element instanceof Stuff){
-
             if(((Doodle)thisClonedAsset).headingDown())
                 element.beHit((Hitter) this, (Hitter) thisClonedAsset);
-
-        }
-        else {
-            element.beHit((Hitter) this, (Hitter) thisClonedAsset);
-        }
 
     }
 

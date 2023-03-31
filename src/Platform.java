@@ -117,33 +117,26 @@ public class Platform extends Element implements CanLocate{
 
             Stuff clonedCointainingStuff = (Stuff) cointainingStuff.getCloned();
 
-            affect(cointainingStuff,clonedCointainingStuff);
-            beAffected(cointainingStuff,clonedCointainingStuff);
+            hold(cointainingStuff,clonedCointainingStuff);
+
 
         }
 
     }
 
-    private void affect(Asset willBeAffected, Asset cloned) {
+    private void hold(Stuff cointainingStuff, Stuff cloned) {
 
-        Platform cld = (Platform) thisClonedAsset;
-
-        ((Stuff)willBeAffected).beLocated(cld.getX(),cld.getY(),cld.getWidth(),cld.getHeight(), (CanLocate) this, (CanLocate) thisClonedAsset);
+        locate(cointainingStuff,cloned);
 
     }
 
-    private void beAffected(Asset affectedBy, Asset cloned) {
 
-
-
-    }
     @Override
     public void giveVelocity(Doodle doodle , Doodle cloned) {
 
         Velocity velocityToBeGiven = new Velocity(((Platform)(thisClonedAsset)).velocityToBeGiven);
 
-            if(((Doodle) cloned).headingDown())
-                doodle.takeVelocityY(velocityToBeGiven, (Element) this, (Element) thisClonedAsset);
+        doodle.takeVelocityY(velocityToBeGiven, (Element) this, (Element) thisClonedAsset);
 
     }
 
@@ -158,6 +151,10 @@ public class Platform extends Element implements CanLocate{
 
     @Override
     public void beHit(Hitter hitter, Hitter cloned) {
+
+        if(hitter instanceof Doodle){
+            giveVelocity((Doodle) hitter, (Doodle) cloned);
+        }
 
     }
 

@@ -78,38 +78,19 @@ public class Propeller extends Stuff{
             Asset otherAsset = doodle;
             Asset otherClonedAsset = otherAsset.getCloned();
 
-            affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+            interactWithDoodle(otherAsset,otherClonedAsset);
+
 
         }
     }
 
-    public void affect(Asset willBeAffected, Asset cloned) {
+    private void interactWithDoodle(Asset otherAsset, Asset otherClonedAsset) {
 
-        if(willBeAffected instanceof Doodle){
-
-            giveVelocity((Doodle) willBeAffected, (Doodle) cloned);
-
-        }
+        giveVelocity((Doodle) otherAsset, (Doodle) otherClonedAsset);
 
 
     }
 
-
-    public void beAffected(Asset affectedBy, Asset cloned) {
-
-        /*if(affectedBy instanceof CanActivate){
-
-            ((CanActivate) affectedBy).activate((CanBeActivated) this, (CanBeActivated) thisClonedAsset);
-        }*/
-
-        if(affectedBy instanceof CanLocate){
-            ((CanLocate) affectedBy).locate((Stuff) this, (Stuff) thisClonedAsset);
-        }
-
-
-
-    }
 
     private void checkDistance(){
             Propeller cld = (Propeller) thisClonedAsset;

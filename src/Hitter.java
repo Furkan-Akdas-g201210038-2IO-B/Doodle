@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public abstract class Hitter extends Asset {
 
 
-    ArrayList<Asset> collidedAssets = new ArrayList<>();
+    ArrayList<Element> collidedElements = new ArrayList<>();
 
     Hitter(){}
 
@@ -11,13 +11,15 @@ public abstract class Hitter extends Asset {
     public void cloneParToThis(Asset asset) {
         super.cloneParToThis(asset);
         Hitter hitter = (Hitter) asset;
-        this.collidedAssets=hitter.collidedAssets;
+        this.collidedElements =hitter.collidedElements;
     }
 
-    public void removeCollidedAsset(Asset collidedAsset){collidedAssets.remove(collidedAsset);}
-    public void clearCollidedAssets(){collidedAssets.clear();}
-    public void addCollidedAsset(Asset collidedAsset){
-        collidedAssets.add(collidedAsset);
+    public void removeCollidedElement(Element element){
+        collidedElements.remove(element);}
+    public void clearCollidedElements(){
+        collidedElements.clear();}
+    public void addCollidedElement(Element element){
+        collidedElements.add(element);
     }
 
     public abstract void hit(Element element,Element cloned);
