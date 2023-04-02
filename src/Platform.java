@@ -47,6 +47,10 @@ public class Platform extends Element implements CanLocate{
         return (Platform) thisClonedAsset;
     }
 
+    public boolean doesCointainStuff(){
+        return cointainingStuff !=null;
+    }
+
     @Override
     public void cloneClonedAsset() {
         thisClonedAsset.cloneParToThis(this);
@@ -68,11 +72,10 @@ public class Platform extends Element implements CanLocate{
     }
 
     public void setCointainingStuff(Stuff cointainingStuff) {
-        cointainingStuff.setPlatform(this);
         this.cointainingStuff = cointainingStuff;
     }
 
-    public void setCointainingStuffToNull(){
+    public void setCointainingStuffToNull(Stuff stuff){
         cointainingStuff = null;
     }
 

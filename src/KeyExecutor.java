@@ -24,10 +24,11 @@ public class KeyExecutor {
         else
             doodle.executeWhenNonePressed();
 
-        if(!keyHandler.isRightPressed() && !keyHandler.isLeftPressed()){
-            doodle.executeWhenRightReleased();
-        }
 
+
+        /*if(!keyHandler.isRightPressed() && !keyHandler.isLeftPressed()){
+            doodle.executeWhenRightAndLeftReleased();
+        }*/
 
     }
 

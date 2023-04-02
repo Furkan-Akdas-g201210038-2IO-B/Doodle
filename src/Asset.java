@@ -8,6 +8,7 @@ public abstract class Asset  {
     BufferedImage image=null;
     Asset thisClonedAsset;
 
+
     final Velocity velocity=new Velocity();
 
     final Force force = new Force();
@@ -366,8 +367,7 @@ public abstract class Asset  {
         int screenX = getX() - getGp().screen.getX();
         int screenY = getY() - getGp().screen.getY();
 
-
-        if(screenY + 300 > 0 && screenY - 300 < getGp().screen.getHeight()){
+        if(screenY + 300 > 0 && screenY - 300 < getGp().screen.getHeight()) {
             g2.drawImage(image, screenX, screenY, getWidth(), getHeight(), null);
         }
 

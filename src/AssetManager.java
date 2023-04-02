@@ -11,7 +11,7 @@ public class AssetManager {
 
     ArrayList<Element> elements = new ArrayList<>();
     ArrayList<Stuff> stuffs = new ArrayList<>();
-
+    private ArrayList<Propeller> propellers=new ArrayList<>();
 
     AssetManager(GamePanel gp){
         this.gp=gp;
@@ -31,6 +31,8 @@ public class AssetManager {
         /*steps.add(newPlatform);
         assets.add(newPlatform);
         elements.add(newPlatform);*/
+
+        //newPlatform.moveAlongX();
 
         assets.add(newPlatform);
 
@@ -84,6 +86,17 @@ public class AssetManager {
         assets.add(propeller);
 
         return propeller;
+    }
+
+    public Trampoline createTrampoline(){
+        Trampoline trampoline = new Trampoline(gp);
+
+        /*elements.add(newSpring);
+        assets.add(newSpring);*/
+
+        assets.add(trampoline);
+
+        return trampoline;
     }
 
 
@@ -160,8 +173,10 @@ public class AssetManager {
 
     public void draw(Graphics2D g2){
 
-        for (Asset asset : assets)
-            asset.draw(g2);
+        for (Asset asset : assets){
+             asset.draw(g2);
+        }
+
     }
 
     public void startInteraction(){

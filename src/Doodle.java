@@ -14,6 +14,9 @@ public class Doodle extends Hitter implements CanLocate{
     private  int moveVelocity=5;
 
     private boolean takeVelocityYLock1=false;
+    private double trampolineNum=0;
+
+    private boolean isAffectedByTrampoline=false;
 
 
     {
@@ -71,7 +74,12 @@ public class Doodle extends Hitter implements CanLocate{
         super.cloneParToThis(doodle);
         this.moveVelocity=doodle.moveVelocity;
         this.stopVelocity=doodle.stopVelocity;
+
         this.takeVelocityYLock1=doodle.takeVelocityYLock1;
+
+        this.isAffectedByTrampoline=doodle.isAffectedByTrampoline;
+        this.trampolineNum=doodle.trampolineNum;
+
     }
 
 
@@ -105,42 +113,35 @@ public class Doodle extends Hitter implements CanLocate{
 
 
     public void executeWhenRightPressed(){
-        //setVelocityX(moveVelocity);
-        setAX(1);
-        setAWeaknessX(4);
 
-        if(headingUp())
-            image = rightImage1;
-        else if(headingDown())
-            image = rightImage;
+        if(headingLeft())
+            setVelocityX(0);
+
+        setAX(1);
+        setAWeaknessX(6);
 
     }
 
     public void executeWhenLeftPressed(){
 
-        //setVelocityX(- moveVelocity);
+        if(headingRight())
+            setVelocityX(0);
+
         setAX(-1);
-        setAWeaknessX(4);
-
-        if(headingUp())
-            image = leftImage1;
-        else if(headingDown())
-            image = leftImage;
-
+        setAWeaknessX(6);
     }
 
-    public void executeWhenNonePressed(){
+    public void animation(){
 
+        if(getAX() > 0){
 
-
-        if(image.equals(rightImage) || image.equals(rightImage1)){
-
-            if(headingUp())
+           if(headingUp())
                 image = rightImage1;
             else if(headingDown())
                 image = rightImage;
 
-        }if(image.equals(leftImage) || image.equals(leftImage1)){
+        }
+        else if(getAX() < 0){
 
             if(headingUp())
                 image = leftImage1;
@@ -148,29 +149,94 @@ public class Doodle extends Hitter implements CanLocate{
                 image = leftImage;
 
         }
-    }
+        else {
 
-    public void executeWhenRightReleased(){
+            if(image.equals(rightImage) || image.equals(rightImage1)){
+
+                if(headingUp())
+                    image = rightImage1;
+                else if(headingDown())
+                    image = rightImage;
+
+            }if(image.equals(leftImage) || image.equals(leftImage1)){
+
+                if(headingUp())
+                    image = leftImage1;
+                else if(headingDown())
+                    image = leftImage;
+
+            }
+
+        }
+    }
+    public void executeWhenNonePressed(){
 
         setAX(0);
 
-
     }
 
-    public void executeWhenLeftReleased() {
-
-        setAX(0);
-
-
+    public boolean headingRight(){
+        return getVelocityX() > 0;
     }
+
+    public boolean headingLeft(){
+        return getVelocityX() < 0;
+    }
+
 
     @Override
     public void update() {
 
-        super.update();
+
+        if(isAffectedByTrampoline)
+            checkAfterTrampoline();
 
         takeVelocityYLock1=false;
+
+        super.update();
     }
+
+    private void checkAfterTrampoline() {
+
+            if(trampolineNum>6.28 || trampolineNum<-6.28){
+                isAffectedByTrampoline=false;
+                trampolineNum=0;
+
+            }
+    }
+
+    @Override
+    public void draw(Graphics2D g2) {
+        //super.draw(g2);
+
+        animation();
+
+        if(isAffectedByTrampoline){
+
+            int screenX = getX() - getGp().screen.getX();
+            int screenY = getY() - getGp().screen.getY();
+
+            if(screenY + 300 > 0 && screenY - 300 < getGp().screen.getHeight()) {
+
+                trampolineNum=trampolineNum-0.08;
+
+                Graphics2D gg =(Graphics2D) g2.create();
+                gg.rotate(trampolineNum, screenX + mainRect.width /2 , screenY + mainRect.height/2);
+                gg.drawImage(image, screenX, screenY, getWidth(), getHeight(), null);
+                gg.dispose();
+
+            }
+
+
+        }else {
+            super.draw(g2);
+        }
+    }
+
+    public void affectByTrampoline(){
+        isAffectedByTrampoline = true;
+    }
+
 
     @Override
     public void startInteraction() {
@@ -180,8 +246,8 @@ public class Doodle extends Hitter implements CanLocate{
             Element otherElement = collidedElement;
             Element otherClonedAsset = (Element) otherElement.getCloned();
 
-
-            hit(otherElement,otherClonedAsset);
+            if(otherClonedAsset.isThisSolid)
+                hit(otherElement,otherClonedAsset);
 
         }
     }

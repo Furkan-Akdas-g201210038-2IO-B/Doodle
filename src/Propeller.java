@@ -5,6 +5,7 @@ import java.io.IOException;
 
 public class Propeller extends Stuff{
 
+
     private final BufferedImage propeller;
     private final BufferedImage propeller1;
     private final BufferedImage propeller2;
@@ -12,7 +13,10 @@ public class Propeller extends Stuff{
 
     private int startDistance;
 
-    private final int totalDistance=160;
+    private int spriteCounter;
+    private int spriteNum;
+
+    private final int totalDistance=1000;
 
 
     {
@@ -21,7 +25,6 @@ public class Propeller extends Stuff{
             propeller1 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller1.png"));
             propeller2 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller2.png"));
             propeller3 = ImageIO.read(getClass().getResourceAsStream("objects/propeller/propeller3.png"));
-
 
             image=propeller;
         } catch (IOException e) {
@@ -45,8 +48,9 @@ public class Propeller extends Stuff{
 
         setVelocityYToBeGiven(-5);
 
-        int height=42;
-        int width=42;
+        int height=50;
+        int width=50;
+
 
 
         mainRect = new Rectangle(0,0,width,height);
@@ -68,6 +72,8 @@ public class Propeller extends Stuff{
         Propeller propeller = (Propeller) asset;
         super.cloneParToThis(propeller);
         this.startDistance = propeller.startDistance;
+        this.spriteNum=propeller.spriteNum;
+        this.spriteCounter=propeller.spriteCounter;
 
     }
     @Override
@@ -80,25 +86,37 @@ public class Propeller extends Stuff{
 
             interactWithDoodle(otherAsset,otherClonedAsset);
 
-
         }
     }
 
-    private void interactWithDoodle(Asset otherAsset, Asset otherClonedAsset) {
+     public void interactWithDoodle(Asset otherAsset, Asset otherClonedAsset) {
 
         giveVelocity((Doodle) otherAsset, (Doodle) otherClonedAsset);
 
+        ((Doodle)otherAsset).locate((Stuff)this, (Stuff) thisClonedAsset);
 
     }
 
+    private void checkAfterCollision(){
 
-    private void checkDistance(){
             Propeller cld = (Propeller) thisClonedAsset;
-            if(cld.startDistance  - cld.getY()  > cld.totalDistance+300){
+            if(cld.startDistance  - cld.getY()  > cld.totalDistance){
+
+                if(doodle.getCloned().headingLeft()){
+                    setVelocityX(-2);
+                    setVelocityY(-5);
+                    setLocation(cld.getX()-25,cld.getY());
+                }else if(doodle.getCloned().headingRight()){
+                    setVelocityX(+2);
+                    setVelocityY(-5);
+                    setLocation(cld.getX()+25,cld.getY());
+                }else{
+
+                }
+
                 connectedToDoodle=false;
+                doodle=null;
             }
-
-
     }
 
     @Override
@@ -110,9 +128,6 @@ public class Propeller extends Stuff{
 
             doodle.takeVelocityY(velocityToBeGiven, (Element) this, (Element) thisClonedAsset);
 
-
-
-
     }
 
     public void overFlowScreen() {
@@ -122,7 +137,16 @@ public class Propeller extends Stuff{
     @Override
     public void beLocated(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned) {
 
-        setLocation(x +20,y - getHeight());
+        Propeller cld = (Propeller) thisClonedAsset;
+
+        if(canLocate instanceof Platform){
+            setLocation(x +20,y - cld.getHeight());
+        }
+
+        if(canLocate instanceof Doodle){
+            setLocation(x +20,y -5);
+        }
+
     }
 
     @Override
@@ -148,21 +172,66 @@ public class Propeller extends Stuff{
             connectedToDoodle=true;
 
             doodle = (Doodle) hitter;
-            platform.setCointainingStuffToNull();
+
+            platform.setCointainingStuffToNull(this);
+            platform=null;
         }
 
 
+    }
 
+    public void animation(){
+        if(connectedToDoodle){
+
+            spriteCounter++;
+            if(spriteCounter > 6){
+                if(spriteNum==0)
+                    spriteNum=1;
+                else if(spriteNum == 1)
+                    spriteNum=2;
+                else if(spriteNum == 2)
+                    spriteNum=3;
+
+                else if(spriteNum == 3)
+                    spriteNum=1;
+
+
+                spriteCounter=0;
+            }
+
+
+            if(spriteNum==0)
+                setImage(propeller);
+            else if(spriteNum==1)
+                setImage(propeller1);
+            else if(spriteNum==2)
+                setImage(propeller2);
+            else if(spriteNum==3)
+                setImage(propeller3);
+
+        }else{
+            setImage(propeller);
+        }
     }
 
     @Override
     public void update() {
-        super.update();
 
-        checkDistance();
+
+        if(connectedToDoodle)
+            checkAfterCollision();
+
+
+        super.update();
     }
 
 
+int x=-1;
+    @Override
+    public void draw(Graphics2D g2) {
+        animation();
+        super.draw(g2);
 
 
+    }
 }

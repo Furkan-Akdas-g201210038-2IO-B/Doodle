@@ -48,4 +48,6 @@ public abstract class Stuff extends Element {
 
     public abstract void beLocatedY(int x, int y, int width, int height, CanLocate canLocate, CanLocate cloned);
 
+    public abstract void interactWithDoodle(Asset otherAsset, Asset otherClonedAsset);
+
 }

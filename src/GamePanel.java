@@ -15,13 +15,16 @@ public class GamePanel extends JPanel implements Runnable {
 
     private final BufferedImage bg;
 
+
     //SYSTEM
-    int FPS =50;
+    int FPS =60;
     Thread gameThread;
     Observer observer ;
     KeyExecutor keyExecutor;
     KeyHandler keyHandler = new KeyHandler();
     WorldCreator worldCreator;
+
+    InteractionManager interactionManager;
 
     Screen screen;
 
@@ -43,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        interactionManager = new InteractionManager(this);
 
         assetManager = new AssetManager(this);
 
@@ -104,8 +109,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         observer.observe();
 
-
-
         keyExecutor.execute();
 
         assetManager.startInteraction();
@@ -116,9 +119,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         screen.update();
 
-        observer.x();
 
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {

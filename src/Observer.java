@@ -51,10 +51,4 @@ public class Observer {
     }
 
 
-    public void x(){
-
-
-
-    }
-
 }

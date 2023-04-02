@@ -9,55 +9,68 @@ public class WorldCreator {
 
     private int cursorY;
     private final int stepMarginY=100;
-    private final int worldHeight =100;
+    private final int worldHeight =1000;
 
-    private final int differentPlatformNum=1;
+    private final int platformNum = worldHeight/stepMarginY;
 
-    private final int springFrequencyWeakness=1;
+    public  int springFrequencyWeakness=9;
+    public  int propellerFrequencyWeakness=6;
+    public  int trampolineFrequencyWeakness=8;
 
-    private final int stepNum = worldHeight/stepMarginY;
- //   private final int stepNum = 17;
+    private final int stepNum = platformNum;
 
     public WorldCreator(GamePanel gp){
 
         this.gp=gp;
         cursorY=0;
 
+        createPlatforms();
+        connectStuffToPlatforms();
         placeSteps();
         placeDoodle();
 
     }
 
-    public void placeSteps(){
+    private void createPlatforms() {
+        for (int i=0;i<platformNum;i++){
+            gp.assetManager.createStillPlatform();
+        }
+    }
 
-        for (int i=0;i<stepNum;i++){
+    private void connectStuffToPlatforms() {
 
-            int randomPlatformNum = random.nextInt(differentPlatformNum);
+        for (Platform platform : gp.assetManager.getPlatforms()){
+
+
             int randomSpringNum = random.nextInt(springFrequencyWeakness);
-
-
-            Platform platform=null;
-
-            if(randomPlatformNum % differentPlatformNum == 0){
-
-                platform = gp.assetManager.createStillPlatform();
-
-            }else if(randomPlatformNum % differentPlatformNum == 1){
-
-                platform = gp.assetManager.createMoveblePlatform();
-
-            }
+            int randomPropellerNum = random.nextInt(propellerFrequencyWeakness);
+            int randomTrampolineNum = random.nextInt(trampolineFrequencyWeakness);
 
             if(randomSpringNum % springFrequencyWeakness==0){
-                /*Spring spring = gp.assetManager.createSpring();
-                platform.setCointainingStuff(spring);*/
-
+                Spring spring = gp.assetManager.createSpring();
+                platform.setCointainingStuff(spring);
+                spring.setPlatform(platform);
+            }
+            else if(randomPropellerNum % propellerFrequencyWeakness==0){
                 Propeller propeller = gp.assetManager.createPropeller();
                 platform.setCointainingStuff(propeller);
+                propeller.setPlatform(platform);
 
+            }else if(randomTrampolineNum % trampolineFrequencyWeakness==0){
+                Trampoline trampoline = gp.assetManager.createTrampoline();
+                platform.setCointainingStuff(trampoline);
+                trampoline.setPlatform(platform);
             }
 
-            //gp.assetManager.createSpring().addConnectedAsset(platform);
+
+        }
+
+    }
+
+    public void placeSteps(){
+
+
+        for (Platform platform : gp.assetManager.getPlatforms()){
 
             int randomX = random.nextInt(gp.gpWidth - platform.getWidth());
 

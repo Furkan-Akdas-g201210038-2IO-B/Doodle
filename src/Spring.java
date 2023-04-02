@@ -5,10 +5,9 @@ import java.io.IOException;
 
 public class Spring extends Stuff{
 
+
     private final BufferedImage comp;
     private final BufferedImage unComp;
-
-    private boolean locatedLock1;
 
     {
         try {
@@ -28,7 +27,7 @@ public class Spring extends Stuff{
 
         setGp(gp);
 
-        setVelocityYToBeGiven(-5);
+        setVelocityYToBeGiven(-12);
 
         int height=30;
         int width=30;
@@ -62,14 +61,12 @@ public class Spring extends Stuff{
     public void cloneParToThis(Asset asset) {
         Spring spring = (Spring)asset;
         super.cloneParToThis(spring);
-        this.locatedLock1 = spring.locatedLock1;
     }
 
 
     @Override
     public void update() {
         super.update();
-        locatedLock1=false;
     }
 
 
@@ -78,43 +75,23 @@ public class Spring extends Stuff{
     public void startInteraction() {
 
 
-
         if(connectedToDoodle){
 
             Asset otherAsset = doodle;
             Asset otherClonedAsset = otherAsset.getCloned();
 
-            affect(otherAsset,otherClonedAsset);
-            beAffected(otherAsset,otherClonedAsset);
+            interactWithDoodle(otherAsset,otherClonedAsset);
 
         }
 
     }
 
+     public void interactWithDoodle(Asset otherAsset, Asset otherClonedAsset) {
+        giveVelocity((Doodle) otherAsset, (Doodle) otherClonedAsset);
 
-    public void affect(Asset willBeAffected, Asset cloned) {
-
-        if(willBeAffected instanceof Doodle){
-
-            giveVelocity((Doodle) willBeAffected, (Doodle) cloned);
-
-        }
-
+        ((Doodle)otherAsset).locate((Stuff)this, (Stuff) thisClonedAsset);
     }
 
-
-    public void beAffected(Asset affectedBy, Asset cloned) {
-
-        /*if(affectedBy instanceof CanActivate){
-
-            ((CanActivate) affectedBy).activate((CanBeActivated) thisAsset, (CanBeActivated) thisClonedAsset);
-        }*/
-
-        if(affectedBy instanceof CanLocate){
-            ((CanLocate) affectedBy).locate((Stuff) this, (Stuff) thisClonedAsset);
-        }
-
-    }
 
     @Override
     public void giveVelocity(Doodle doodle,Doodle cloned) {
@@ -140,9 +117,11 @@ public class Spring extends Stuff{
 
            isThisSolid=false;
            canGiveVelocity=false;
+           connectedToDoodle=false;
+
+           giveVelocity((Doodle) hitter, (Doodle) cloned);
 
        }
-
 
 
     }
